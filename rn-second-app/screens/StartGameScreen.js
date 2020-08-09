@@ -6,6 +6,7 @@ import Input from '../components/Input';
 import NumberContainer from '../components/NumberContainer';
 import colors from '../constants/colors';
 
+
 const StartGameScreen = (props) => {
     const [enteredValue, setEnteredValue] = useState('');
     const [selectedNumber, setSelectedNumber] = useState();
