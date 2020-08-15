@@ -38,8 +38,8 @@ export default function App() {
         setGuessRounds(0);
     };
 
-    const onGameOver = (roundsNumber) => {
-        setGuessRounds(roundsNumber);
+    const onGameOver = (guesses) => {
+        setGuessRounds(guesses.length);
     };
 
     const onRestartPress = () => {
