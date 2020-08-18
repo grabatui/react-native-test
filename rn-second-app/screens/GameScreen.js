@@ -2,6 +2,7 @@ import React, {useState, useRef, useEffect} from 'react';
 import {StyleSheet, View, Text, Alert, ScrollView} from 'react-native';
 import {Ionicons} from '@expo/vector-icons';
 
+import BodyText from '../components/BodyText';
 import NumberContainer from '../components/NumberContainer';
 import Card from '../components/Card'
 import MainButton from '../components/MainButton';
@@ -27,6 +28,15 @@ const callWrongDirectionAlert = () => {
         [
             {text: 'Sorry', 'style': 'cancel'},
         ]
+    );
+};
+
+const renderListItem = (value, numberOfRound) => {
+    return (
+        <View key={value} style={styles.listItem}>
+            <BodyText>#{numberOfRound}</BodyText>
+            <BodyText>{value}</BodyText>
+        </View>
     );
 };
 
@@ -102,15 +112,11 @@ const GameScreen = (props) => {
                 </MainButton>
             </Card>
 
-            <ScrollView>
-                {pastGuesses.map((guess) => {
-                    return (
-                        <View key={guess}>
-                            <Text>{guess}</Text>
-                        </View>
-                    );
-                })}
-            </ScrollView>
+            <View style={styles.listWrapper}>
+                <ScrollView contentContainerStyle={styles.list}>
+                    {pastGuesses.map((guess, index) => renderListItem(guess, pastGuesses.length - index))}
+                </ScrollView>
+            </View>
         </View>
     );
 };
@@ -130,6 +136,25 @@ const styles = StyleSheet.create({
     },
     button: {
         paddingHorizontal: 17,
+    },
+    listWrapper: {
+        flex: 1,
+        marginTop: 10,
+        width: '80%',
+    },
+    list: {
+        flexGrow: 1,
+        justifyContent: 'flex-end',
+    },
+    listItem: {
+        borderColor: '#ccc',
+        borderWidth: 1,
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        marginVertical: 5,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
     },
 });
 
