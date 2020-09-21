@@ -52,12 +52,25 @@ const GameScreen = (props) => {
 
     const [currentGuess, setCurrentGuess] = useState(initialGuess);
     const [pastGuesses, setPastGuesses] = useState([initialGuess]);
+    const [availableDeviceHeight, setAvailableDeviceHeight] = useState(Dimensions.get('window').height);
 
     useEffect(() => {
         if (currentGuess === props.userChoice) {
             props.onGameOver(pastGuesses);
         }
     }, [currentGuess, props.userChoice, props.onGameOver]);
+
+    useEffect(() => {
+        const updateLayout = () => {
+            setAvailableDeviceHeight(Dimensions.get('window').height);
+        };
+
+        Dimensions.addEventListener('change', updateLayout);
+
+        return () => {
+            Dimensions.removeEventListener('change', updateLayout);
+        };
+    });
 
     const onButtonPress = (direction) => {
         if (direction !== 'lower' && direction !== 'greater') {
@@ -95,6 +108,32 @@ const GameScreen = (props) => {
             ...currentPastGuess,
         ])
     };
+
+    if (availableDeviceHeight < 500) {
+        return (
+            <View style={styles.screen}>
+                <Text>Opponent's Guess</Text>
+    
+                <View style={styles.controls}>
+                    <MainButton onPress={onButtonPress.bind(this, 'lower')} style={styles.button}>
+                        <Ionicons name="md-remove" size={24} color="white" />
+                    </MainButton>
+        
+                    <NumberContainer>{currentGuess}</NumberContainer>
+        
+                    <MainButton onPress={onButtonPress.bind(this, 'greater')} style={styles.button}>
+                        <Ionicons name="md-add" size={24} color="white" />
+                    </MainButton>
+                </View>
+    
+                <View style={styles.listWrapper}>
+                    <ScrollView contentContainerStyle={styles.list}>
+                        {pastGuesses.map((guess, index) => renderListItem(guess, pastGuesses.length - index))}
+                    </ScrollView>
+                </View>
+            </View>
+        );
+    }
 
     return (
         <View style={styles.screen}>
@@ -136,6 +175,12 @@ const styles = StyleSheet.create({
     },
     button: {
         paddingHorizontal: 17,
+    },
+    controls: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '30%',
+        alignItems: 'center',
     },
     listWrapper: {
         flex: 1,
