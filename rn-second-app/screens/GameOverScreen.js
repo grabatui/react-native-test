@@ -30,7 +30,6 @@ const GameOverScreen = (props) => {
 };
 
 const imageSize = Dimensions.get('window').width * 0.7;
-const imageMargin = Dimensions.get('window').height / 25;
 const textFontSize = (Dimensions.get('window').height < 400) ? 16 : 18;
 
 const styles = StyleSheet.create({
