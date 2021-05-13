@@ -12,6 +12,8 @@ import FavoritesScreen from './screens/FavoritesScreen';
 import FiltersScreen from './screens/FiltersScreen';
 import MealScreen from './screens/MealScreen';
 
+import colors from './constants/colors';
+
 
 const MealsNavigator = createStackNavigator();
 
@@ -36,12 +38,42 @@ export default function App() {
 
     return (
         <NavigationContainer>
-            <MealsNavigator.Navigator initialRouteName="Categories">
-                <MealsNavigator.Screen name="Categories" component={CategroriesScreen} />
-                <MealsNavigator.Screen name="CategoryMeals" component={CategoryMealsScreen} />
-                <MealsNavigator.Screen name="Favorites" component={FavoritesScreen} />
-                <MealsNavigator.Screen name="Filters" component={FiltersScreen} />
-                <MealsNavigator.Screen name="Meal" component={MealScreen} />
+            <MealsNavigator.Navigator
+                initialRouteName="Categories"
+                screenOptions={{
+                    headerStyle: styles.headerBar,
+                    headerTintColor: 'white',
+                }}
+            >
+                <MealsNavigator.Screen
+                    name="Categories"
+                    component={CategroriesScreen}
+                />
+
+                <MealsNavigator.Screen
+                    name="CategoryMeals"
+                    component={CategoryMealsScreen}
+                    options={({ route }) => {
+                        return {
+                            title: route.params.title,
+                        };
+                    }}
+                />
+
+                <MealsNavigator.Screen
+                    name="Favorites"
+                    component={FavoritesScreen}
+                />
+
+                <MealsNavigator.Screen
+                    name="Filters"
+                    component={FiltersScreen}
+                />
+
+                <MealsNavigator.Screen
+                    name="Meal"
+                    component={MealScreen}
+                />
             </MealsNavigator.Navigator>
         </NavigationContainer>
     );
@@ -53,5 +85,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    headerBar: {
+        backgroundColor: colors.primaryColor,
     },
 });
