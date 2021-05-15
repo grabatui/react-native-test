@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { enableScreens } from 'react-native-screens';
 
 import CategroriesScreen from './screens/CategoriesScreen';
 import CategoryMealsScreen from './screens/CategoryMealsScreen';
@@ -17,6 +18,7 @@ import colors from './constants/colors';
 
 const MealsNavigator = createStackNavigator();
 
+enableScreens();
 
 const fetchFonts = () => {
     return Font.loadAsync({
@@ -42,38 +44,24 @@ export default function App() {
                 initialRouteName="Categories"
                 screenOptions={{
                     headerStyle: styles.headerBar,
-                    headerTintColor: 'white',
+                    headerTintColor: Platform.OS == 'android' ? 'white' : colors.primaryColor,
                 }}
             >
-                <MealsNavigator.Screen
-                    name="Categories"
-                    component={CategroriesScreen}
-                />
+                <MealsNavigator.Screen name="Categories" component={CategroriesScreen} />
 
                 <MealsNavigator.Screen
                     name="CategoryMeals"
                     component={CategoryMealsScreen}
-                    options={({ route }) => {
-                        return {
-                            title: route.params.title,
-                        };
-                    }}
+                    options={({ route }) => ({
+                        title: route.params.category.title,
+                    })}
                 />
 
-                <MealsNavigator.Screen
-                    name="Favorites"
-                    component={FavoritesScreen}
-                />
+                <MealsNavigator.Screen name="Favorites" component={FavoritesScreen} />
 
-                <MealsNavigator.Screen
-                    name="Filters"
-                    component={FiltersScreen}
-                />
+                <MealsNavigator.Screen name="Filters" component={FiltersScreen} />
 
-                <MealsNavigator.Screen
-                    name="Meal"
-                    component={MealScreen}
-                />
+                <MealsNavigator.Screen name="Meal" component={MealScreen} />
             </MealsNavigator.Navigator>
         </NavigationContainer>
     );
@@ -87,6 +75,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     headerBar: {
-        backgroundColor: colors.primaryColor,
+        backgroundColor: Platform.OS == 'android' ? colors.primaryColor : 'white',
     },
 });
