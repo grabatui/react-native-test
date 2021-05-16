@@ -1,8 +1,8 @@
 import Category from '../models/category';
 import Meal from '../models/meal';
 
-import { affordable, pricey, luxurious } from '../constants/affordability';
-import { simple, changeling, hard } from '../constants/complexity';
+import affordabilities from '../constants/affordability';
+import complexities from '../constants/complexity';
 
 
 export const CATEGORIES = [
@@ -23,8 +23,8 @@ export const MEALS = [
         id: 'm1',
         categoriesIds: ['c1', 'c2'],
         title: 'Spaghetti with Tomato Sauce',
-        affordability: affordable,
-        complexity: simple,
+        affordability: affordabilities.affordable,
+        complexity: complexities.simple,
         imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg/800px-Spaghetti_Bolognese_mit_Parmesan_oder_Grana_Padano.jpg',
         duration: 20,
         ingridients: [
@@ -54,8 +54,8 @@ export const MEALS = [
         id: 'm2',
         categoriesIds: ['c2'],
         title: 'Toast Hawaii',
-        affordability: affordable,
-        complexity: simple,
+        affordability: affordabilities.affordable,
+        complexity: complexities.simple,
         imageUrl: 'https://cdn.pixabay.com/photo/2018/07/11/21/51/toast-3532016_1280.jpg',
         duration: 10,
         ingridients: [
@@ -80,8 +80,8 @@ export const MEALS = [
         id: 'm3',
         categoriesIds: ['c3'],
         title: 'Classic Hamburger',
-        affordability: pricey,
-        complexity: simple,
+        affordability: affordabilities.pricey,
+        complexity: complexities.simple,
         imageUrl: 'https://cdn.pixabay.com/photo/2014/10/23/18/05/burger-500054_1280.jpg',
         duration: 45,
         ingridients: [
@@ -109,8 +109,8 @@ export const MEALS = [
         id: 'm4',
         categoriesIds: ['c4'],
         title: 'Wiener Schnitzel',
-        affordability: luxurious,
-        complexity: challenging,
+        affordability: affordabilities.luxurious,
+        complexity: complexities.challenging,
         imageUrl: 'https://cdn.pixabay.com/photo/2018/03/31/19/29/schnitzel-3279045_1280.jpg',
         duration: 60,
         ingridients: [
@@ -142,8 +142,8 @@ export const MEALS = [
         id: 'm5',
         categoriesIds: ['c2', 'c5', 'c10'],
         title: 'Salad with Smoked Salmon',
-        affordability: luxurious,
-        complexity: simple,
+        affordability: affordabilities.luxurious,
+        complexity: complexities.simple,
         imageUrl: 'https://cdn.pixabay.com/photo/2016/10/25/13/29/smoked-salmon-salad-1768890_1280.jpg',
         duration: 15,
         ingridients: [
@@ -174,8 +174,8 @@ export const MEALS = [
         id: 'm6',
         categoriesIds: ['c6', 'c10'],
         title: 'Delicious Orange Mousse',
-        affordability: affordable,
-        complexity: hard,
+        affordability: affordabilities.affordable,
+        complexity: complexities.hard,
         imageUrl: 'https://cdn.pixabay.com/photo/2017/05/01/05/18/pastry-2274750_1280.jpg',
         duration: 240,
         ingridients: [
@@ -207,8 +207,8 @@ export const MEALS = [
         id: 'm7',
         categoriesIds: ['c7'],
         title: 'Pancakes',
-        affordability: affordable,
-        complexity: simple,
+        affordability: affordabilities.affordable,
+        complexity: complexities.simple,
         imageUrl: 'https://cdn.pixabay.com/photo/2018/07/10/21/23/pancake-3529653_1280.jpg',
         duration: 20,
         ingridients: [
@@ -236,8 +236,8 @@ export const MEALS = [
         id: 'm8',
         categoriesIds: ['c8'],
         title: 'Creamy Indian Chicken Curry',
-        affordability: pricey,
-        complexity: challenging,
+        affordability: affordabilities.pricey,
+        complexity: complexities.challenging,
         imageUrl: 'https://cdn.pixabay.com/photo/2018/06/18/16/05/indian-food-3482749_1280.jpg',
         duration: 35,
         ingridients: [
@@ -267,8 +267,8 @@ export const MEALS = [
         id: 'm9',
         categoriesIds: ['c9'],
         title: 'Chocolate Souffle',
-        affordability: affordable,
-        complexity: hard,
+        affordability: affordabilities.affordable,
+        complexity: complexities.hard,
         imageUrl: 'https://cdn.pixabay.com/photo/2014/08/07/21/07/souffle-412785_1280.jpg',
         duration: 45,
         ingridients: [
@@ -314,8 +314,8 @@ export const MEALS = [
         id: 'm10',
         categoriesIds: ['c2', 'c5', 'c10'],
         title: 'Asparagus Salad with Cherry Tomatoes',
-        affordability: luxurious,
-        complexity: simple,
+        affordability: affordabilities.luxurious,
+        complexity: complexities.simple,
         imageUrl: 'https://cdn.pixabay.com/photo/2018/04/09/18/26/asparagus-3304997_1280.jpg',
         duration: 30,
         ingridients: [
