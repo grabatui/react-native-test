@@ -57,11 +57,17 @@ export default function App() {
                     })}
                 />
 
+                <MealsNavigator.Screen
+                    name="Meal"
+                    component={MealScreen}
+                    options={({ route }) => ({
+                        title: route.params.meal.title,
+                    })}
+                />
+
                 <MealsNavigator.Screen name="Favorites" component={FavoritesScreen} />
 
                 <MealsNavigator.Screen name="Filters" component={FiltersScreen} />
-
-                <MealsNavigator.Screen name="Meal" component={MealScreen} />
             </MealsNavigator.Navigator>
         </NavigationContainer>
     );

@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
 
 import { MEALS } from '../data/dummy';
+import MealItem from '../components/MealItem';
 
 
 const CategoryMealsScreen = ({ navigation, route }) => {
@@ -10,7 +11,21 @@ const CategoryMealsScreen = ({ navigation, route }) => {
     });
 
     const renderGridItem = (data) => {
-        return <View><Text>{data.item.title}</Text></View>
+        return (
+            <MealItem
+                title={data.item.title}
+                data={data.item}
+                duration={data.item.duration + 'm'}
+                complexity={data.item.complexity.toUpperCase()}
+                affordability={data.item.affordability.toUpperCase()}
+                image={data.item.imageUrl}
+                onPress={() => {
+                    navigation.navigate('Meal', {
+                        meal: data.item
+                    });
+                }}
+            />
+        );
     };
 
     return (
@@ -19,6 +34,7 @@ const CategoryMealsScreen = ({ navigation, route }) => {
                 numColumns={1}
                 data={categoryMeals}
                 renderItem={renderGridItem}
+                style={styles.list}
             />
         </View>
     )
@@ -29,6 +45,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    list: {
+        width: '95%',
     },
 });
 
