@@ -34,6 +34,25 @@ const fetchFonts = () => {
     });
 };
 
+const mealNavigatorScreenProperties = {
+    name: 'Meal',
+    component: MealScreen,
+    options: ({ route }) => ({
+        title: route.params.meal.title,
+        headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                <Item
+                    title='Favorite'
+                    iconName='ios-star'
+                    onPress={() => {
+                        console.log('Favorite!');
+                    }}
+                />
+            </HeaderButtons>
+        ),
+    })
+}
+
 const DefaultStackNavigator = () => {
     const [fontLoaded, setFontLoaded] = useState(false);
 
@@ -63,26 +82,25 @@ const DefaultStackNavigator = () => {
                 })}
             />
 
-            <MealsNavigator.Screen
-                name="Meal"
-                component={MealScreen}
-                options={({ route }) => ({
-                    title: route.params.meal.title,
-                    headerRight: () => (
-                        <HeaderButtons HeaderButtonComponent={HeaderButton}>
-                            <Item
-                                title='Favorite'
-                                iconName='ios-star'
-                                onPress={() => {
-                                    console.log('Favorite!');
-                                }}
-                            />
-                        </HeaderButtons>
-                    ),
-                })}
-            />
+            <MealsNavigator.Screen {...mealNavigatorScreenProperties} />
 
             <MealsNavigator.Screen name="Filters" component={FiltersScreen} />
+        </MealsNavigator.Navigator>
+    );
+};
+
+const FavoritesStackNavigator = () => {
+    return (
+        <MealsNavigator.Navigator
+            initialRouteName="Your favorites"
+            screenOptions={{
+                headerStyle: styles.headerBar,
+                headerTintColor: Platform.OS == 'android' ? 'white' : colors.primaryColor,
+            }}
+        >
+            <MealsNavigator.Screen name="Your favorites" component={FavoritesScreen} />
+
+            <MealsNavigator.Screen {...mealNavigatorScreenProperties} />
         </MealsNavigator.Navigator>
     );
 };
@@ -120,7 +138,7 @@ export default function App() {
 
                 <MealsTabNavigator.Screen
                     name="Favorites"
-                    component={FavoritesScreen}
+                    component={FavoritesStackNavigator}
                     options={{
                         tabBarIcon: ({ color }) => (
                             <Ionicons name='ios-star' size={25} color={color} />
