@@ -2,10 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, Button } from 'react-native';
 
 
-const MealsScreen = ({ navigation }) => {
+const MealsScreen = ({ navigation, route }) => {
+    const meal = route.params.meal;
+
     return (
         <View style={styles.screen}>
-            <Text>Meals screen</Text>
+            <Text>{meal.title}</Text>
 
             <Button
                 title="Go back to the Categories"

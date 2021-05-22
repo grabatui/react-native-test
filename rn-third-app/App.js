@@ -6,12 +6,15 @@ import * as Font from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { enableScreens } from 'react-native-screens';
+import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import CategroriesScreen from './screens/CategoriesScreen';
 import CategoryMealsScreen from './screens/CategoryMealsScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
 import FiltersScreen from './screens/FiltersScreen';
 import MealScreen from './screens/MealScreen';
+
+import HeaderButton from './components/HeaderButton';
 
 import colors from './constants/colors';
 
@@ -62,6 +65,17 @@ export default function App() {
                     component={MealScreen}
                     options={({ route }) => ({
                         title: route.params.meal.title,
+                        headerRight: () => (
+                            <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                                <Item
+                                    title='Favorite'
+                                    iconName='ios-star'
+                                    onPress={() => {
+                                        console.log('Favorite!');
+                                    }}
+                                />
+                            </HeaderButtons>
+                        ),
                     })}
                 />
 
