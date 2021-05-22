@@ -8,6 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { enableScreens } from 'react-native-screens';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -23,7 +24,6 @@ import colors from './constants/colors';
 
 
 const MealsNavigator = createStackNavigator();
-const MealsTabNavigator = createBottomTabNavigator();
 
 enableScreens();
 
@@ -87,14 +87,26 @@ const DefaultStackNavigator = () => {
     );
 };
 
+
+const MealsTabNavigator = Platform.OS === 'android' ? createMaterialBottomTabNavigator() : createBottomTabNavigator();
+
+const tabNavigatorProperties = Platform.OS === 'android'
+    // For material-bottom-tabs
+    ? {
+        activeColor: 'white',
+        shifting: true,
+    }
+    // For bottom-tabs
+    : {
+        tabBarOptions: {
+            activeTintColor: colors.accentColor,
+        },
+    };
+
 export default function App() {
     return (
         <NavigationContainer>
-            <MealsTabNavigator.Navigator
-                tabBarOptions={{
-                    activeTintColor: colors.accentColor,
-                }}
-            >
+            <MealsTabNavigator.Navigator {...tabNavigatorProperties}>
                 <MealsTabNavigator.Screen
                     name="Default"
                     component={DefaultStackNavigator}
@@ -102,6 +114,7 @@ export default function App() {
                         tabBarIcon: ({ color }) => (
                             <Ionicons name='ios-restaurant' size={25} color={color} />
                         ),
+                        tabBarColor: colors.primaryColor,
                     }}
                 />
 
@@ -112,6 +125,7 @@ export default function App() {
                         tabBarIcon: ({ color }) => (
                             <Ionicons name='ios-star' size={25} color={color} />
                         ),
+                        tabBarColor: colors.accentColor,
                     }}
                 />
             </MealsTabNavigator.Navigator>
