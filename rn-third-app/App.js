@@ -9,6 +9,7 @@ import { enableScreens } from 'react-native-screens';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { Ionicons } from '@expo/vector-icons';
 
@@ -19,6 +20,7 @@ import FiltersScreen from './screens/FiltersScreen';
 import MealScreen from './screens/MealScreen';
 
 import HeaderButton from './components/HeaderButton';
+import OpenDrawerIcon from './components/OpenDrawerIcon';
 
 import colors from './constants/colors';
 
@@ -53,7 +55,7 @@ const mealNavigatorScreenProperties = {
     })
 }
 
-const DefaultStackNavigator = () => {
+const DefaultStackNavigator = ({ navigation }) => {
     const [fontLoaded, setFontLoaded] = useState(false);
 
     if ( ! fontLoaded) {
@@ -70,6 +72,9 @@ const DefaultStackNavigator = () => {
             screenOptions={{
                 headerStyle: styles.headerBar,
                 headerTintColor: Platform.OS == 'android' ? 'white' : colors.primaryColor,
+                headerLeft: () => (
+                    <OpenDrawerIcon navigation={navigation} />
+                ),
             }}
         >
             <MealsNavigator.Screen name="Categories" component={CategroriesScreen} />
@@ -89,13 +94,16 @@ const DefaultStackNavigator = () => {
     );
 };
 
-const FavoritesStackNavigator = () => {
+const FavoritesStackNavigator = ({ navigation }) => {
     return (
         <MealsNavigator.Navigator
             initialRouteName="Your favorites"
             screenOptions={{
                 headerStyle: styles.headerBar,
                 headerTintColor: Platform.OS == 'android' ? 'white' : colors.primaryColor,
+                headerLeft: () => (
+                    <OpenDrawerIcon navigation={navigation} />
+                ),
             }}
         >
             <MealsNavigator.Screen name="Your favorites" component={FavoritesScreen} />
@@ -121,32 +129,61 @@ const tabNavigatorProperties = Platform.OS === 'android'
         },
     };
 
+const MealsTabNavigatorScreen = () => (
+    <MealsTabNavigator.Navigator {...tabNavigatorProperties}>
+        <MealsTabNavigator.Screen
+            name="Default"
+            component={DefaultStackNavigator}
+            options={{
+                tabBarIcon: ({ color }) => (
+                    <Ionicons name='ios-restaurant' size={25} color={color} />
+                ),
+                tabBarColor: colors.primaryColor,
+            }}
+        />
+
+        <MealsTabNavigator.Screen
+            name="Favorites"
+            component={FavoritesStackNavigator}
+            options={{
+                tabBarIcon: ({ color }) => (
+                    <Ionicons name='ios-star' size={25} color={color} />
+                ),
+                tabBarColor: colors.accentColor,
+            }}
+        />
+    </MealsTabNavigator.Navigator>
+);
+
+
+const FiltersStackNavigator = () => {
+    return (
+        <MealsNavigator.Navigator
+            initialRouteName="Filters"
+            screenOptions={{
+                headerStyle: styles.headerBar,
+                headerTintColor: Platform.OS == 'android' ? 'white' : colors.primaryColor,
+                headerLeft: () => (
+                    <OpenDrawerIcon navigation={navigation} />
+                ),
+            }}
+        >
+            <MealsNavigator.Screen name="Filters" component={FiltersScreen} />
+        </MealsNavigator.Navigator>
+    );
+};
+
+
+const DrawerNavigator = createDrawerNavigator();
+
 export default function App() {
     return (
         <NavigationContainer>
-            <MealsTabNavigator.Navigator {...tabNavigatorProperties}>
-                <MealsTabNavigator.Screen
-                    name="Default"
-                    component={DefaultStackNavigator}
-                    options={{
-                        tabBarIcon: ({ color }) => (
-                            <Ionicons name='ios-restaurant' size={25} color={color} />
-                        ),
-                        tabBarColor: colors.primaryColor,
-                    }}
-                />
+            <DrawerNavigator.Navigator>
+                <DrawerNavigator.Screen name='Main' component={MealsTabNavigatorScreen} />
 
-                <MealsTabNavigator.Screen
-                    name="Favorites"
-                    component={FavoritesStackNavigator}
-                    options={{
-                        tabBarIcon: ({ color }) => (
-                            <Ionicons name='ios-star' size={25} color={color} />
-                        ),
-                        tabBarColor: colors.accentColor,
-                    }}
-                />
-            </MealsTabNavigator.Navigator>
+                <DrawerNavigator.Screen name='Filters' component={FiltersStackNavigator} />
+            </DrawerNavigator.Navigator>
         </NavigationContainer>
     );
 }
