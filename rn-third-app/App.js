@@ -179,8 +179,13 @@ const DrawerNavigator = createDrawerNavigator();
 export default function App() {
     return (
         <NavigationContainer>
-            <DrawerNavigator.Navigator>
-                <DrawerNavigator.Screen name='Main' component={MealsTabNavigatorScreen} />
+            <DrawerNavigator.Navigator
+                drawerContentOptions={{
+                    activeTintColor: colors.accentColor,
+                    labelStyle: styles.drawer,
+                }}
+            >
+                <DrawerNavigator.Screen name='Meals' component={MealsTabNavigatorScreen} />
 
                 <DrawerNavigator.Screen name='Filters' component={FiltersStackNavigator} />
             </DrawerNavigator.Navigator>
@@ -197,5 +202,8 @@ const styles = StyleSheet.create({
     },
     headerBar: {
         backgroundColor: Platform.OS == 'android' ? colors.primaryColor : 'white',
+    },
+    drawer: {
+        fontFamily: 'open-sans-bold',
     },
 });
