@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, Platform, TouchableNativeFeedback } from 'react-native';
 
+import DefaultText from './DefaultText';
+
 const MealItem = ({ title, onPress, duration, complexity, affordability, image }) => {
     let TouchableComponent = (Platform.OS == 'android' && Platform.Version > 21)
         ? TouchableNativeFeedback
@@ -19,9 +21,9 @@ const MealItem = ({ title, onPress, duration, complexity, affordability, image }
                     </View>
 
                     <View style={{...styles.mealRow, ...styles.mealDetail}}>
-                        <Text>{duration}</Text>
-                        <Text>{complexity}</Text>
-                        <Text>{affordability}</Text>
+                        <DefaultText>{duration}</DefaultText>
+                        <DefaultText>{complexity}</DefaultText>
+                        <DefaultText>{affordability}</DefaultText>
                     </View>
                 </View>
             </TouchableComponent>

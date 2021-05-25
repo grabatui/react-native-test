@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform, Text } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import * as Font from 'expo-font';
 
@@ -56,22 +56,14 @@ const mealNavigatorScreenProperties = {
 }
 
 const DefaultStackNavigator = ({ navigation }) => {
-    const [fontLoaded, setFontLoaded] = useState(false);
-
-    if ( ! fontLoaded) {
-        return <AppLoading
-            startAsync={fetchFonts}
-            onFinish={() => setFontLoaded(true)}
-            onError={(error) => console.error(error)}
-        />
-    }
-
     return (
         <MealsNavigator.Navigator
             initialRouteName="Categories"
             screenOptions={{
                 headerStyle: styles.headerBar,
                 headerTintColor: Platform.OS == 'android' ? 'white' : colors.primaryColor,
+                headerTitleStyle: styles.headerBarTitle,
+                headerBackTitleStyle: styles.headerBarBackTitle,
                 headerLeft: () => (
                     <OpenDrawerIcon navigation={navigation} />
                 ),
@@ -101,6 +93,8 @@ const FavoritesStackNavigator = ({ navigation }) => {
             screenOptions={{
                 headerStyle: styles.headerBar,
                 headerTintColor: Platform.OS == 'android' ? 'white' : colors.primaryColor,
+                headerTitleStyle: styles.headerBarTitle,
+                headerBackTitleStyle: styles.headerBarBackTitle,
                 headerLeft: () => (
                     <OpenDrawerIcon navigation={navigation} />
                 ),
@@ -125,6 +119,7 @@ const tabNavigatorProperties = Platform.OS === 'android'
     // For bottom-tabs
     : {
         tabBarOptions: {
+            labelStyle: styles.tabNavigator,
             activeTintColor: colors.accentColor,
         },
     };
@@ -132,13 +127,18 @@ const tabNavigatorProperties = Platform.OS === 'android'
 const MealsTabNavigatorScreen = () => (
     <MealsTabNavigator.Navigator {...tabNavigatorProperties}>
         <MealsTabNavigator.Screen
-            name="Default"
+            name="Meals"
             component={DefaultStackNavigator}
             options={{
                 tabBarIcon: ({ color }) => (
                     <Ionicons name='ios-restaurant' size={25} color={color} />
                 ),
                 tabBarColor: colors.primaryColor,
+                tabBarLabel: Platform.OS === 'android'
+                    ? (
+                        <Text style={styles.tabLabel}>Meals</Text>
+                    )
+                    : 'Meals',
             }}
         />
 
@@ -150,19 +150,26 @@ const MealsTabNavigatorScreen = () => (
                     <Ionicons name='ios-star' size={25} color={color} />
                 ),
                 tabBarColor: colors.accentColor,
+                tabBarLabel: Platform.OS === 'android'
+                    ? (
+                        <Text style={styles.tabLabel}>Favorites</Text>
+                    )
+                    : 'Favorites',
             }}
         />
     </MealsTabNavigator.Navigator>
 );
 
 
-const FiltersStackNavigator = () => {
+const FiltersStackNavigator = ({ navigation }) => {
     return (
         <MealsNavigator.Navigator
             initialRouteName="Filters"
             screenOptions={{
                 headerStyle: styles.headerBar,
                 headerTintColor: Platform.OS == 'android' ? 'white' : colors.primaryColor,
+                headerTitleStyle: styles.headerBarTitle,
+                headerBackTitleStyle: styles.headerBarBackTitle,
                 headerLeft: () => (
                     <OpenDrawerIcon navigation={navigation} />
                 ),
@@ -177,6 +184,16 @@ const FiltersStackNavigator = () => {
 const DrawerNavigator = createDrawerNavigator();
 
 export default function App() {
+    const [fontLoaded, setFontLoaded] = useState(false);
+
+    if ( ! fontLoaded) {
+        return <AppLoading
+            startAsync={fetchFonts}
+            onFinish={() => setFontLoaded(true)}
+            onError={(error) => console.error(error)}
+        />
+    }
+
     return (
         <NavigationContainer>
             <DrawerNavigator.Navigator
@@ -203,7 +220,19 @@ const styles = StyleSheet.create({
     headerBar: {
         backgroundColor: Platform.OS == 'android' ? colors.primaryColor : 'white',
     },
+    headerBarTitle: {
+        fontFamily: 'open-sans-bold',
+    },
+    headerBarBackTitle: {
+        fontFamily: 'open-sans-bold',
+    },
     drawer: {
+        fontFamily: 'open-sans-bold',
+    },
+    tabNavigator: {
+        fontFamily: 'open-sans-bold',
+    },
+    tabLabel: {
         fontFamily: 'open-sans-bold',
     },
 });
