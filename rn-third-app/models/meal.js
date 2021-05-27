@@ -7,7 +7,7 @@ class Meal {
         this.complexity = data.complexity;
         this.imageUrl = data.imageUrl || '';
         this.duration = data.duration || 0;
-        this.ingridients = data.ingridients || [];
+        this.ingredients = data.ingredients || [];
         this.steps = data.steps || [];
 
         this.isGlutenFree = data.isGlutenFree;
