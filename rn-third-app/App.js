@@ -10,8 +10,9 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
 import { Ionicons } from '@expo/vector-icons';
+import { createStore, combineReducers } from 'redux';
+import { Provider } from 'react-redux';
 
 import CategroriesScreen from './screens/CategoriesScreen';
 import CategoryMealsScreen from './screens/CategoryMealsScreen';
@@ -23,11 +24,18 @@ import HeaderButton from './components/HeaderButton';
 import OpenDrawerIcon from './components/OpenDrawerIcon';
 
 import colors from './constants/colors';
+import mealsReducer from './store/reducers/meals';
 
 
 const MealsNavigator = createStackNavigator();
 
 enableScreens();
+
+const store = createStore(
+    combineReducers({
+        meals: mealsReducer,
+    })
+);
 
 const fetchFonts = () => {
     return Font.loadAsync({
@@ -195,18 +203,20 @@ export default function App() {
     }
 
     return (
-        <NavigationContainer>
-            <DrawerNavigator.Navigator
-                drawerContentOptions={{
-                    activeTintColor: colors.accentColor,
-                    labelStyle: styles.drawer,
-                }}
-            >
-                <DrawerNavigator.Screen name='Meals' component={MealsTabNavigatorScreen} />
+        <Provider store={store}>
+            <NavigationContainer>
+                <DrawerNavigator.Navigator
+                    drawerContentOptions={{
+                        activeTintColor: colors.accentColor,
+                        labelStyle: styles.drawer,
+                    }}
+                >
+                    <DrawerNavigator.Screen name='Meals' component={MealsTabNavigatorScreen} />
 
-                <DrawerNavigator.Screen name='Filters' component={FiltersStackNavigator} />
-            </DrawerNavigator.Navigator>
-        </NavigationContainer>
+                    <DrawerNavigator.Screen name='Filters' component={FiltersStackNavigator} />
+                </DrawerNavigator.Navigator>
+            </NavigationContainer>
+        </Provider>
     );
 }
 

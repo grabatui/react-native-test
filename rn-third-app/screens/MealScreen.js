@@ -13,7 +13,7 @@ const ListItem = ({ children }) => {
 };
 
 
-const MealsScreen = ({ navigation, route }) => {
+const MealsScreen = ({ route }) => {
     const meal = route.params.meal;
 
     return (
