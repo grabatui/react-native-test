@@ -44,24 +44,7 @@ const fetchFonts = () => {
     });
 };
 
-const mealNavigatorScreenProperties = {
-    name: 'Meal',
-    component: MealScreen,
-    options: ({ route }) => ({
-        title: route.params.meal.title,
-        headerRight: () => (
-            <HeaderButtons HeaderButtonComponent={HeaderButton}>
-                <Item
-                    title='Favorite'
-                    iconName='ios-star'
-                    onPress={() => {
-                        console.log('Favorite!');
-                    }}
-                />
-            </HeaderButtons>
-        ),
-    })
-}
+const onPressFavoriteButton = (params) => params.toggleFavoriteHandler.call();
 
 const DefaultStackNavigator = ({ navigation }) => {
     return (
@@ -87,7 +70,22 @@ const DefaultStackNavigator = ({ navigation }) => {
                 })}
             />
 
-            <MealsNavigator.Screen {...mealNavigatorScreenProperties} />
+            <MealsNavigator.Screen
+                name='Meal'
+                component={MealScreen}
+                options={({ route }) => ({
+                    title: route.params.meal.title,
+                    headerRight: () => (
+                        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                            <Item
+                                title='Favorite'
+                                iconName='ios-star'
+                                onPress={() => onPressFavoriteButton(route.params)}
+                            />
+                        </HeaderButtons>
+                    ),
+                })}
+            />
 
             <MealsNavigator.Screen name="Filters" component={FiltersScreen} />
         </MealsNavigator.Navigator>
@@ -110,7 +108,22 @@ const FavoritesStackNavigator = ({ navigation }) => {
         >
             <MealsNavigator.Screen name="Your favorites" component={FavoritesScreen} />
 
-            <MealsNavigator.Screen {...mealNavigatorScreenProperties} />
+            <MealsNavigator.Screen
+                name='Meal'
+                component={MealScreen}
+                options={({ route }) => ({
+                    title: route.params.meal.title,
+                    headerRight: () => (
+                        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                            <Item
+                                title='Favorite'
+                                iconName='ios-star'
+                                onPress={() => onPressFavoriteButton(route.params)}
+                            />
+                        </HeaderButtons>
+                    ),
+                })}
+            />
         </MealsNavigator.Navigator>
     );
 };

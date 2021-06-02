@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { ScrollView, View, Image, Text, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 import DefaultText from '../components/DefaultText';
+
+import { toggleFavorite } from '../store/actions/meals';
 
 
 const ListItem = ({ children }) => {
@@ -13,8 +16,20 @@ const ListItem = ({ children }) => {
 };
 
 
-const MealsScreen = ({ route }) => {
+const MealsScreen = ({ route, navigation }) => {
     const meal = route.params.meal;
+
+    const dispatch = useDispatch();
+
+    const toggleFavoriteHandler = useCallback(
+        () => dispatch(toggleFavorite(meal.id)),
+        [dispatch, meal]
+    );
+
+    useEffect(
+        () => navigation.setParams({toggleFavoriteHandler}),
+        [toggleFavoriteHandler]
+    );
 
     return (
         <ScrollView>
