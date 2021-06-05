@@ -1,10 +1,14 @@
 import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import { View, FlatList, StyleSheet, Text } from 'react-native';
 
 import MealItem from '../components/MealItem';
 
 
-const MealList = ({ meals, onPressMeal }) => {
+const MealList = ({ meals, onPressMeal, onEmpty }) => {
+    if ( ! meals || meals.length <= 0) {
+        return onEmpty || <View><Text>Empty</Text></View>
+    }
+
     const renderGridItem = (data) => {
         return (
             <MealItem

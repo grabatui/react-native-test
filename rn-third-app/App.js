@@ -79,7 +79,7 @@ const DefaultStackNavigator = ({ navigation }) => {
                         <HeaderButtons HeaderButtonComponent={HeaderButton}>
                             <Item
                                 title='Favorite'
-                                iconName='ios-star'
+                                iconName={route.params.isMealFavorite ? 'ios-star' : 'ios-star-outline'}
                                 onPress={() => onPressFavoriteButton(route.params)}
                             />
                         </HeaderButtons>
@@ -117,7 +117,7 @@ const FavoritesStackNavigator = ({ navigation }) => {
                         <HeaderButtons HeaderButtonComponent={HeaderButton}>
                             <Item
                                 title='Favorite'
-                                iconName='ios-star'
+                                iconName={route.params.isMealFavorite ? 'ios-star' : 'ios-star-outline'}
                                 onPress={() => onPressFavoriteButton(route.params)}
                             />
                         </HeaderButtons>

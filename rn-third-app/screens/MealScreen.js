@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { ScrollView, View, Image, Text, StyleSheet } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import DefaultText from '../components/DefaultText';
 
@@ -19,6 +19,10 @@ const ListItem = ({ children }) => {
 const MealsScreen = ({ route, navigation }) => {
     const meal = route.params.meal;
 
+    const isMealFavorite = useSelector((state) => {
+        return state.meals.favorites.some((favoriteMeal) => favoriteMeal.id === meal.id)
+    });
+
     const dispatch = useDispatch();
 
     const toggleFavoriteHandler = useCallback(
@@ -29,6 +33,11 @@ const MealsScreen = ({ route, navigation }) => {
     useEffect(
         () => navigation.setParams({toggleFavoriteHandler}),
         [toggleFavoriteHandler]
+    );
+
+    useEffect(
+        () => navigation.setParams({isMealFavorite}),
+        [isMealFavorite]
     );
 
     return (
