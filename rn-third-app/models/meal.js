@@ -10,10 +10,10 @@ class Meal {
         this.ingredients = data.ingredients || [];
         this.steps = data.steps || [];
 
-        this.isGlutenFree = data.isGlutenFree;
-        this.isVegan = data.isVegan;
-        this.isVegetarian = data.isVegetarian;
-        this.isLactoseFree = data.isLactoseFree;
+        this.isGlutenFree = data.isGlutenFree || false;
+        this.isVegan = data.isVegan || false;
+        this.isVegetarian = data.isVegetarian || false;
+        this.isLactoseFree = data.isLactoseFree || false;
     }
 }
 

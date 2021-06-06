@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 
 import HeaderButton from '../components/HeaderButton';
 import Filter from '../components/Filter';
+import { setFilters } from '../store/actions/meals';
 
 
 const FiltersScreen = ({ navigation }) => {
@@ -13,6 +15,20 @@ const FiltersScreen = ({ navigation }) => {
     const [isVegan, setVegan] = useState(false);
     const [isVegetarian, setVegetarian] = useState(false);
 
+    const dispatch = useDispatch();
+
+    const saveFilters = useCallback(
+        () => dispatch(
+            setFilters({isGlutenFree, isLactoseFree, isVegan, isVegetarian})
+        ),
+        [isGlutenFree, isLactoseFree, isVegan, isVegetarian, dispatch]
+    );
+    
+    useEffect(
+        () => navigation.setParams({isGlutenFree, isLactoseFree, isVegan, isVegetarian}),
+        [saveFilters]
+    );
+
     React.useLayoutEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -20,9 +36,7 @@ const FiltersScreen = ({ navigation }) => {
                     <Item
                         title='Save'
                         iconName='ios-save'
-                        onPress={() => {
-                            navigation.setParams({isGlutenFree, isLactoseFree, isVegan, isVegetarian});
-                        }}
+                        onPress={saveFilters}
                     />
                 </HeaderButtons>
             ),

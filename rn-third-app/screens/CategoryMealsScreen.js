@@ -1,7 +1,9 @@
 import React from 'react';
+import { View, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import MealList from '../components/MealList';
+import DefaultText from '../components/DefaultText';
 
 
 const CategoryMealsScreen = ({ navigation, route }) => {
@@ -23,8 +25,21 @@ const CategoryMealsScreen = ({ navigation, route }) => {
                     isMealFavorite
                 });
             }}
+            onEmpty={(
+                <View style={styles.emptyWrapper}>
+                    <DefaultText>No meals found. Check your filters!</DefaultText>
+                </View>
+            )}
         />
     )
 };
+
+const styles = StyleSheet.create({
+    emptyWrapper: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+});
 
 export default CategoryMealsScreen;
