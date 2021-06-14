@@ -1,7 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
+
+import ShopNavigation from './navigation/ShopNavigation';
 
 import productsReducer from './store/reducers/products';
 
@@ -13,20 +15,18 @@ const store = createStore(
 );
 
 export default function App() {
-  return (
-    <Provider store={store}>
-        <View style={styles.container}>
-            <Text>Open up App.js to start working on your app!</Text>
-        </View>
-    </Provider>
-  );
+    return (
+        <Provider store={store}>
+            <ShopNavigation />
+        </Provider>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 });
