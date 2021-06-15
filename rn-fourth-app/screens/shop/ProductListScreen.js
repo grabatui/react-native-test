@@ -1,6 +1,8 @@
 import React from 'react';
-import { FlatList, Text } from 'react-native';
+import { FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
+
+import ProductItem from '../../components/shop/ProductItem';
 
 
 const ProductListScreen = () => {
@@ -9,11 +11,13 @@ const ProductListScreen = () => {
     return (
         <FlatList
             data={products}
-            renderItem={({ item }) => {
-                return (
-                    <Text>{item.title}</Text>
-                );
-            }}
+            renderItem={({ item }) => (
+                <ProductItem
+                    item={item}
+                    onViewDetailsPress={() => null}
+                    onCartPress={() => null}
+                />
+            )}
         />
     );
 };
