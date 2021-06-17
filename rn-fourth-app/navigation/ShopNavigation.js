@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import ProductListScreen from '../screens/shop/ProductListScreen';
+import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
 
 import colors from '../constants/colors';
 
@@ -25,6 +26,14 @@ const ShopNavigation = () => (
                 options={{
                     headerTitle: 'All products',
                 }}
+            />
+
+            <Stack.Screen
+                name="Product"
+                component={ProductDetailScreen}
+                options={({ route }) => ({
+                    headerTitle: route.params.data.title,
+                })}
             />
         </Stack.Navigator>
     </NavigationContainer>

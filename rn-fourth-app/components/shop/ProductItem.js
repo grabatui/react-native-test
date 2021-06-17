@@ -1,38 +1,46 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, Button } from 'react-native';
+import { StyleSheet, View, Text, Image, Button, Platform, TouchableOpacity, TouchableNativeFeedback } from 'react-native';
 
 import colors from '../../constants/colors';
 
 
 const ProductItem = ({ item, onViewDetailsPress, onCartPress }) => {
+    let TouchableComponent = (Platform.OS == 'android' && Platform.Version > 21)
+        ? TouchableNativeFeedback
+        : TouchableOpacity;
+
     return (
         <View style={styles.wrapper}>
-            <View style={styles.imageWrapper}>
-                <Image
-                    source={{uri: item.imageUrl}}
-                    style={styles.image}
-                />
-            </View>
+            <TouchableComponent onPress={onViewDetailsPress} useForeground>
+                <View>
+                    <View style={styles.imageWrapper}>
+                        <Image
+                            source={{uri: item.imageUrl}}
+                            style={styles.image}
+                        />
+                    </View>
 
-            <View style={styles.textsWrapper}>
-                <Text style={styles.title}>{item.title}</Text>
+                    <View style={styles.textsWrapper}>
+                        <Text style={styles.title}>{item.title}</Text>
 
-                <Text style={styles.price}>${item.price.toFixed(2)}</Text>
-            </View>
+                        <Text style={styles.price}>${item.price.toFixed(2)}</Text>
+                    </View>
 
-            <View style={styles.buttonsWrapper}>
-                <Button
-                    color={colors.primary}
-                    title="View Details"
-                    onPress={onViewDetailsPress}
-                />
+                    <View style={styles.buttonsWrapper}>
+                        <Button
+                            color={colors.primary}
+                            title="View Details"
+                            onPress={onViewDetailsPress}
+                        />
 
-                <Button
-                    color={colors.primary}
-                    title="To Cart"
-                    onPress={onCartPress}
-                />
-            </View>
+                        <Button
+                            color={colors.primary}
+                            title="To Cart"
+                            onPress={onCartPress}
+                        />
+                    </View>
+                </View>
+            </TouchableComponent>
         </View>
     );
 };
@@ -51,6 +59,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         height: 300,
         margin: 20,
+        overflow: 'hidden',
     },
     imageWrapper: {
         width: '100%',

@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import ProductItem from '../../components/shop/ProductItem';
 
 
-const ProductListScreen = () => {
+const ProductListScreen = ({ navigation }) => {
     const products = useSelector((state) => state.products.available);
 
     return (
@@ -14,7 +14,9 @@ const ProductListScreen = () => {
             renderItem={({ item }) => (
                 <ProductItem
                     item={item}
-                    onViewDetailsPress={() => null}
+                    onViewDetailsPress={() => {
+                        navigation.navigate('Product', {data: item});
+                    }}
                     onCartPress={() => null}
                 />
             )}
