@@ -18,6 +18,8 @@ const ShopNavigation = () => (
             screenOptions={{
                 headerStyle: styles.wrapperHeader,
                 headerTintColor: Platform.OS === 'android' ? 'white' : colors.primary,
+                headerTitleStyle: styles.headerBarTitle,
+                headerBackTitleStyle: styles.headerBarBackTitle,
             }}
         >
             <Stack.Screen
@@ -42,7 +44,13 @@ const ShopNavigation = () => (
 const styles = StyleSheet.create({
     wrapperHeader: {
         backgroundColor: Platform.OS === 'android' ? colors.primary : '',
-    }
+    },
+    headerBarTitle: {
+        fontFamily: 'open-sans-bold',
+    },
+    headerBarBackTitle: {
+        fontFamily: 'open-sans',
+    },
 });
 
 export default ShopNavigation;
