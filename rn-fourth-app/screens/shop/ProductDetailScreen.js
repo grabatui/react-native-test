@@ -1,11 +1,15 @@
 import React from 'react';
 import { ScrollView, View, Text, Image, Button, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
 
 import colors from '../../constants/colors';
+import { addToCart } from '../../store/actions/cart';
 
 
 const ProductDetailScreen = ({ route }) => {
     const product = route.params.data;
+
+    const dispatch = useDispatch();
 
     return (
         <ScrollView>
@@ -17,7 +21,11 @@ const ProductDetailScreen = ({ route }) => {
             <View style={styles.action}>
                 <Button
                     title="Add to Cart"
-                    onPress={() => {}}
+                    onPress={() => {
+                        dispatch(
+                            addToCart(product)
+                        );
+                    }}
                     color={colors.primary}
                 />
             </View>
