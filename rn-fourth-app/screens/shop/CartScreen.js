@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, FlatList, StyleSheet, Button } from 'react-native';
 import { useSelector } from 'react-redux';
 
+import CartItem from '../../components/shop/CartItem';
+
 import colors from '../../constants/colors';
 
 
@@ -25,6 +27,13 @@ const CartScreen = () => {
 
             <FlatList
                 data={cartItems}
+                keyExtractor={(item) => item.productId}
+                renderItem={({ item }) => (
+                    <CartItem
+                        item={item}
+                        onRemovePress={() => {}}
+                    />
+                )}
             />
         </View>
     );
