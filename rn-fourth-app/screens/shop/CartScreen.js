@@ -6,6 +6,7 @@ import CartItem from '../../components/shop/CartItem';
 
 import colors from '../../constants/colors';
 import { removeFromCart } from '../../store/actions/cart';
+import { addOrder } from '../../store/actions/order';
 
 
 const CartScreen = () => {
@@ -25,6 +26,11 @@ const CartScreen = () => {
                     title="Order now"
                     color={colors.accent}
                     disabled={cartItems.length <= 0}
+                    onPress={() => {
+                        dispatch(
+                            addOrder(cartItems, cartTotalAmount)
+                        )
+                    }}
                 />
             </View>
 
