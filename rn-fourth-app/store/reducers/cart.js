@@ -45,6 +45,6 @@ export default (state = initialState, action) => {
 
     return {
         ...state,
-        totalAmount: state.totalAmount.toFixed(2)
+        totalAmount: parseFloat(state.totalAmount).toFixed(2),
     };
 };

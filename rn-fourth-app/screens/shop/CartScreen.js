@@ -29,7 +29,7 @@ const CartScreen = () => {
                     onPress={() => {
                         dispatch(
                             addOrder(cartItems, cartTotalAmount)
-                        )
+                        );
                     }}
                 />
             </View>

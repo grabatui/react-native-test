@@ -2,10 +2,11 @@ import { Order } from "../../models/order";
 import { ADD_ORDER } from "../actions/order";
 
 const initialState = {
-    orders: [],
+    all: [],
 };
 
 export default (state = initialState, action) => {
+
     switch (action.type) {
         case ADD_ORDER:
             const { cartItems, totalAmount } = action;
@@ -18,8 +19,8 @@ export default (state = initialState, action) => {
 
             order.id = new Date().toString();
 
-            state.orders.push(order)
+            state.all.push(order)
     }
-
+    console.log(state);
     return state;
 };
