@@ -6,7 +6,6 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-
     switch (action.type) {
         case ADD_ORDER:
             const { cartItems, totalAmount } = action;
@@ -17,10 +16,11 @@ export default (state = initialState, action) => {
                 new Date()
             );
 
-            order.id = new Date().toString();
+            order.id = new Date().getTime();
 
-            state.all.push(order)
+            state.all.push(order);
+            break;
     }
-    console.log(state);
+
     return state;
 };
