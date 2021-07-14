@@ -11,11 +11,7 @@ const OrdersScreen = () => {
         <FlatList
             data={orders}
             keyExtractor={(item) => item.id + ''}
-            renderItem={({ item }) => (
-                <OrderItem
-                    item={item}
-                />
-            )}
+            renderItem={({ item }) => <OrderItem item={item} />}
         />
     );
 };

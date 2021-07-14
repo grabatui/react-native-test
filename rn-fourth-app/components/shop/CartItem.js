@@ -16,15 +16,17 @@ const CartItem = ({ item, onRemovePress }) => {
             </View>
 
             <View style={styles.informationWrapper}>
-                <Text style={styles.amountText}>${item.price * item.quantity}&nbsp;</Text>
+                <Text style={styles.amountText}>${parseFloat(item.price * item.quantity).toFixed(2)}&nbsp;</Text>
 
-                <TouchableComponent onPress={onRemovePress} style={styles.delete}>
-                    <Ionicons
-                        name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'}
-                        size={23}
-                        color="red"
-                    />
-                </TouchableComponent>
+                {onRemovePress && (
+                    <TouchableComponent onPress={onRemovePress} style={styles.delete}>
+                        <Ionicons
+                            name={Platform.OS === 'android' ? 'md-trash' : 'ios-trash'}
+                            size={23}
+                            color="red"
+                        />
+                    </TouchableComponent>
+                )}
             </View>
         </View>
     );
