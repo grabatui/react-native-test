@@ -1,17 +1,15 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, Button, Platform, TouchableOpacity, TouchableNativeFeedback } from 'react-native';
-
-import colors from '../../constants/colors';
+import { StyleSheet, View, Text, Image, Platform, TouchableOpacity, TouchableNativeFeedback } from 'react-native';
 
 
-const ProductItem = ({ item, onViewDetailsPress, onCartPress }) => {
+const ProductItem = ({ item, onSelectPress, leftButton, rightButton }) => {
     let TouchableComponent = (Platform.OS == 'android' && Platform.Version > 21)
         ? TouchableNativeFeedback
         : TouchableOpacity;
 
     return (
         <View style={styles.wrapper}>
-            <TouchableComponent onPress={onViewDetailsPress} useForeground>
+            <TouchableComponent onPress={onSelectPress} useForeground>
                 <View>
                     <View style={styles.imageWrapper}>
                         <Image
@@ -27,17 +25,9 @@ const ProductItem = ({ item, onViewDetailsPress, onCartPress }) => {
                     </View>
 
                     <View style={styles.buttonsWrapper}>
-                        <Button
-                            color={colors.primary}
-                            title="View Details"
-                            onPress={onViewDetailsPress}
-                        />
+                        {leftButton || ''}
 
-                        <Button
-                            color={colors.primary}
-                            title="To Cart"
-                            onPress={onCartPress}
-                        />
+                        {rightButton || ''}
                     </View>
                 </View>
             </TouchableComponent>
