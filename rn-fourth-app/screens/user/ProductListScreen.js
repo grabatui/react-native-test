@@ -7,10 +7,10 @@ import { deleteProduct } from '../../store/actions/products';
 import colors from '../../constants/colors';
 
 
-const ProductListScreen = () => {
+const ProductListScreen = ({ navigation }) => {
     const userProducts = useSelector((state) => state.products.byUser);
 
-    const onSelectPress = (item) => navigation.navigate('Product', {data: item});
+    const onSelectPress = (item) => navigation.navigate('UserProductEdit', {data: item});
 
     const dispatch = useDispatch();
 

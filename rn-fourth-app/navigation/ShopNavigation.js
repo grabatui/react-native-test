@@ -11,6 +11,7 @@ import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
 import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
 import UserProductListScreen from '../screens/user/ProductListScreen';
+import UserProductEditScreen from '../screens/user/ProductEditScreen';
 
 import HeaderButton from '../components/HeaderButton';
 import OpenDrawerIcon from '../components/OpenDrawerIcon';
@@ -89,11 +90,30 @@ const OrdersNavigator = ({ navigation }) => (
 const AdminNavigator = ({ navigation }) => (
     <Stack.Navigator
         initialRouteName="UserProducts"
-        screenOptions={getDefaultScreenOptions(navigation)}
+        screenOptions={{
+            ...getDefaultScreenOptions(navigation),
+            headerRight: () => (
+                <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                    <Item
+                        title="Add"
+                        iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
+                        onPress={() => navigation.navigate('UserProductEdit')}
+                    />
+                </HeaderButtons>
+            ),
+        }}
     >
         <Stack.Screen
             name="UserProducts"
             component={UserProductListScreen}
+            options={{
+                headerTitle: 'Your products',
+            }}
+        />
+        
+        <Stack.Screen
+            name="UserProductEdit"
+            component={UserProductEditScreen}
             options={{
                 headerTitle: 'Your products',
             }}
