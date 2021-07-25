@@ -90,33 +90,40 @@ const OrdersNavigator = ({ navigation }) => (
 const AdminNavigator = ({ navigation }) => (
     <Stack.Navigator
         initialRouteName="UserProducts"
-        screenOptions={{
-            ...getDefaultScreenOptions(navigation),
-            headerRight: () => (
-                <HeaderButtons HeaderButtonComponent={HeaderButton}>
-                    <Item
-                        title="Add"
-                        iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
-                        onPress={() => navigation.navigate('UserProductEdit')}
-                    />
-                </HeaderButtons>
-            ),
-        }}
+        screenOptions={getDefaultScreenOptions(navigation)}
     >
         <Stack.Screen
             name="UserProducts"
             component={UserProductListScreen}
             options={{
                 headerTitle: 'Your products',
+                headerRight: () => (
+                    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                        <Item
+                            title="Add"
+                            iconName={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
+                            onPress={() => navigation.navigate('UserProductEdit', {title: 'New product'})}
+                        />
+                    </HeaderButtons>
+                ),
             }}
         />
-        
+
         <Stack.Screen
             name="UserProductEdit"
             component={UserProductEditScreen}
-            options={{
-                headerTitle: 'Your products',
-            }}
+            options={({ route }) => ({
+                headerTitle: route.params.title,
+                headerRight: () => (
+                    <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                        <Item
+                            title="Add"
+                            iconName={Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'}
+                            onPress={() => {}}
+                        />
+                    </HeaderButtons>
+                ),
+            })}
         />
     </Stack.Navigator>
 );
