@@ -22,5 +22,8 @@ export default (state = initialState, action) => {
             break;
     }
 
-    return state;
+    return {
+        ...state,
+        all: [...state.all],
+    };
 };

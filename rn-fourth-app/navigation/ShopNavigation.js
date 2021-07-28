@@ -114,15 +114,19 @@ const AdminNavigator = ({ navigation }) => (
             component={UserProductEditScreen}
             options={({ route }) => ({
                 headerTitle: route.params.title,
-                headerRight: () => (
-                    <HeaderButtons HeaderButtonComponent={HeaderButton}>
-                        <Item
-                            title="Add"
-                            iconName={Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'}
-                            onPress={() => {}}
-                        />
-                    </HeaderButtons>
-                ),
+                headerRight: () => {
+                    const onSubmit = route.params.onSubmit;
+
+                    return (
+                        <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                            <Item
+                                title="Add"
+                                iconName={Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'}
+                                onPress={onSubmit}
+                            />
+                        </HeaderButtons>
+                    );
+                },
             })}
         />
     </Stack.Navigator>

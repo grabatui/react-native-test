@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView, Text, TextInput, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { createProduct, updateProduct } from '../../store/actions/products';
 
 
-const ProductEditScreen = ({ route }) => {
+const ProductEditScreen = ({ route, navigation }) => {
     const data = route.params.data || {};
 
     const [saveData, setSaveData] = useState(data);
@@ -13,6 +15,28 @@ const ProductEditScreen = ({ route }) => {
             [label]: value,
         }));
     };
+
+    const dispatch = useDispatch();
+
+    const onSubmit = useCallback(
+        () => {
+            if (data && data.id) {
+                dispatch(
+                    updateProduct(data.id, saveData)
+                );
+            } else {
+                dispatch(
+                    createProduct(saveData)
+                )
+            }
+        },
+        [saveData]
+    );
+
+    useEffect(
+        () => navigation.setParams({onSubmit}),
+        [onSubmit]
+    );
 
     return (
         <ScrollView>
@@ -35,13 +59,13 @@ const ProductEditScreen = ({ route }) => {
                     />
                 </View>
 
-                { ! saveData.price && (
+                { ! data.price && (
                     <View style={styles.formControl}>
                         <Text style={styles.label}>Price</Text>
                         <TextInput
                             style={styles.input}
                             value={saveData.price ? saveData.price + '' : ''}
-                            onChangeText={(value) => setSaveDataValue('price', value)}
+                            onChangeText={(value) => setSaveDataValue('price', parseFloat(value))}
                         />
                     </View>
                 )}
