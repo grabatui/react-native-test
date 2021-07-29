@@ -29,6 +29,8 @@ const ProductEditScreen = ({ route, navigation }) => {
                     createProduct(saveData)
                 )
             }
+
+            navigation.goBack();
         },
         [saveData]
     );
