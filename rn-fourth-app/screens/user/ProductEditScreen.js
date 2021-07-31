@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, Text, TextInput, StyleSheet } from 'react-native';
+import { View, ScrollView, Text, TextInput, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { createProduct, updateProduct } from '../../store/actions/products';
 
@@ -8,6 +8,11 @@ const ProductEditScreen = ({ route, navigation }) => {
     const data = route.params.data || {};
 
     const [saveData, setSaveData] = useState(data);
+    const [validData, setValidData] = useState({
+        title: !!data.title,
+        imageUrl: !!data.imageUrl,
+        price: !!data.price,
+    });
 
     const setSaveDataValue = (label, value) => {
         setSaveData((state) => ({
@@ -16,10 +21,31 @@ const ProductEditScreen = ({ route, navigation }) => {
         }));
     };
 
+    const setValidDataValue = (label, isValid) => {
+        setValidData((state) => ({
+            ...state,
+            [label]: isValid,
+        }));
+    };
+
     const dispatch = useDispatch();
 
     const onSubmit = useCallback(
         () => {
+            for (let validDataField of Object.keys(validData)) {
+                if ( ! validData[validDataField]) {
+                    Alert.alert(
+                        'Wrong input!',
+                        'Please check the errors in the form',
+                        [
+                            {text: 'Okay'},
+                        ]
+                    );
+
+                    return;
+                }
+            }
+
             if (data && data.id) {
                 dispatch(
                     updateProduct(data.id, saveData)
@@ -40,6 +66,38 @@ const ProductEditScreen = ({ route, navigation }) => {
         [onSubmit]
     );
 
+    const onTitleChanged = (value) => {
+        if (value.trim().length <= 0) {
+            setValidDataValue('title', false);
+        } else {
+            setValidDataValue('title', true);
+        }
+
+        setSaveDataValue('title', value);
+    };
+
+    const onImageUrlChanged = (value) => {
+        if (value.trim().length <= 0) {
+            setValidDataValue('imageUrl', false);
+        } else {
+            setValidDataValue('imageUrl', true);
+        }
+
+        setSaveDataValue('imageUrl', value);
+    };
+
+    const onPriceChanged = (value) => {
+        value = parseFloat(value);
+
+        if (value <= 0) {
+            setValidDataValue('price', false);
+        } else {
+            setValidDataValue('price', true);
+        }
+
+        setSaveDataValue('price', value);
+    };
+
     return (
         <ScrollView>
             <View style={styles.form}>
@@ -48,8 +106,14 @@ const ProductEditScreen = ({ route, navigation }) => {
                     <TextInput
                         style={styles.input}
                         value={saveData.title}
-                        onChangeText={(value) => setSaveDataValue('title', value)}
+                        onChangeText={onTitleChanged}
+                        autoCapitalize="sentences"
+                        autoCorrect
                     />
+
+                    { ! validData.title && (
+                        <Text>Please enter a valid title</Text>
+                    )}
                 </View>
 
                 <View style={styles.formControl}>
@@ -57,8 +121,12 @@ const ProductEditScreen = ({ route, navigation }) => {
                     <TextInput
                         style={styles.input}
                         value={saveData.imageUrl}
-                        onChangeText={(value) => setSaveDataValue('imageUrl', value)}
+                        onChangeText={onImageUrlChanged}
                     />
+
+                    { ! validData.imageUrl && (
+                        <Text>Please enter a valid image url</Text>
+                    )}
                 </View>
 
                 { ! data.price && (
@@ -67,8 +135,13 @@ const ProductEditScreen = ({ route, navigation }) => {
                         <TextInput
                             style={styles.input}
                             value={saveData.price ? saveData.price + '' : ''}
-                            onChangeText={(value) => setSaveDataValue('price', parseFloat(value))}
+                            onChangeText={onPriceChanged}
+                            keyboardType="number-pad"
                         />
+
+                        { ! validData.price && (
+                            <Text>Please enter a valid price</Text>
+                        )}
                     </View>
                 )}
 
