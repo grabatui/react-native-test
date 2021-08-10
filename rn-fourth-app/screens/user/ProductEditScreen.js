@@ -1,32 +1,36 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import { View, ScrollView, StyleSheet, Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { createProduct, updateProduct } from '../../store/actions/products';
+
+import Input from '../../components/Input';
 
 
 const ProductEditScreen = ({ route, navigation }) => {
     const data = route.params.data || {};
+    const { title, imageUrl, price } = data;
 
     const [saveData, setSaveData] = useState(data);
     const [validData, setValidData] = useState({
-        title: !!data.title,
-        imageUrl: !!data.imageUrl,
-        price: !!data.price,
+        title: !!title,
+        imageUrl: !!imageUrl,
+        price: !!price,
     });
 
-    const setSaveDataValue = (label, value) => {
-        setSaveData((state) => ({
-            ...state,
-            [label]: value,
-        }));
-    };
-
-    const setValidDataValue = (label, isValid) => {
-        setValidData((state) => ({
-            ...state,
-            [label]: isValid,
-        }));
-    };
+    const setSaveDataValue = useCallback(
+        (label, value, isValid) => {
+            setSaveData((state) => ({
+                ...state,
+                [label]: value,
+            }));
+    
+            setValidData((state) => ({
+                ...state,
+                [label]: isValid,
+            }));
+        },
+        [setSaveData, setValidData]
+    );
 
     const dispatch = useDispatch();
 
@@ -58,7 +62,7 @@ const ProductEditScreen = ({ route, navigation }) => {
 
             navigation.goBack();
         },
-        [saveData]
+        [saveData, validData]
     );
 
     useEffect(
@@ -66,93 +70,54 @@ const ProductEditScreen = ({ route, navigation }) => {
         [onSubmit]
     );
 
-    const onTitleChanged = (value) => {
-        if (value.trim().length <= 0) {
-            setValidDataValue('title', false);
-        } else {
-            setValidDataValue('title', true);
-        }
-
-        setSaveDataValue('title', value);
-    };
-
-    const onImageUrlChanged = (value) => {
-        if (value.trim().length <= 0) {
-            setValidDataValue('imageUrl', false);
-        } else {
-            setValidDataValue('imageUrl', true);
-        }
-
-        setSaveDataValue('imageUrl', value);
-    };
-
-    const onPriceChanged = (value) => {
-        value = parseFloat(value);
-
-        if (value <= 0) {
-            setValidDataValue('price', false);
-        } else {
-            setValidDataValue('price', true);
-        }
-
-        setSaveDataValue('price', value);
-    };
-
     return (
         <ScrollView>
             <View style={styles.form}>
-                <View style={styles.formControl}>
-                    <Text style={styles.label}>Title</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={saveData.title}
-                        onChangeText={onTitleChanged}
-                        autoCapitalize="sentences"
-                        autoCorrect
-                    />
+                <Input
+                    id="title"
+                    label="Title"
+                    errorText="Please enter a valid title"
+                    initialValue={saveData.title}
+                    initialIsValid={validData.title}
+                    onInputChanged={setSaveDataValue}
+                    autoCapitalize="sentences"
+                    autoCorrect
+                    vaidateRequired
+                />
 
-                    { ! validData.title && (
-                        <Text>Please enter a valid title</Text>
-                    )}
-                </View>
-
-                <View style={styles.formControl}>
-                    <Text style={styles.label}>Image URL</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={saveData.imageUrl}
-                        onChangeText={onImageUrlChanged}
-                    />
-
-                    { ! validData.imageUrl && (
-                        <Text>Please enter a valid image url</Text>
-                    )}
-                </View>
+                <Input
+                    id="imageUrl"
+                    label="Image URL"
+                    errorText="Please enter a valid image url"
+                    initialValue={saveData.imageUrl}
+                    initialIsValid={validData.imageUrl}
+                    onInputChanged={setSaveDataValue}
+                    vaidateRequired
+                />
 
                 { ! data.price && (
-                    <View style={styles.formControl}>
-                        <Text style={styles.label}>Price</Text>
-                        <TextInput
-                            style={styles.input}
-                            value={saveData.price ? saveData.price + '' : ''}
-                            onChangeText={onPriceChanged}
-                            keyboardType="number-pad"
-                        />
-
-                        { ! validData.price && (
-                            <Text>Please enter a valid price</Text>
-                        )}
-                    </View>
+                    <Input
+                        id="price"
+                        label="Price"
+                        errorText="Please enter a valid price"
+                        keyboardType="number-pad"
+                        validateMin={0}
+                        onInputChanged={setSaveDataValue}
+                    />
                 )}
 
-                <View style={styles.formControl}>
-                    <Text style={styles.label}>Description</Text>
-                    <TextInput
-                        style={styles.input}
-                        value={saveData.description}
-                        onChangeText={(value) => setSaveDataValue('description', value)}
-                    />
-                </View>
+                <Input
+                    id="description"
+                    label="Description"
+                    errorText="Please enter a valid description"
+                    initialValue={saveData.description}
+                    initialIsValid={true}
+                    onInputChanged={setSaveDataValue}
+                    autoCapitalize="sentences"
+                    autoCorrect
+                    multiline
+                    numberOfLines={3}
+                />
             </View>
         </ScrollView>
     );
@@ -161,19 +126,6 @@ const ProductEditScreen = ({ route, navigation }) => {
 const styles = StyleSheet.create({
     form: {
         margin: 20,
-    },
-    formControl: {
-        width: '100%',
-    },
-    label: {
-        fontFamily: 'open-sans-bold',
-        marginVertical: 8,
-    },
-    input: {
-        paddingHorizontal: 2,
-        paddingVertical: 5,
-        borderBottomColor: '#ccc',
-        borderBottomWidth: 1,
     },
 });
 
