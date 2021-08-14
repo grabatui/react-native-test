@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, StyleSheet, Alert } from 'react-native';
+import { View, ScrollView, StyleSheet, Alert, KeyboardAvoidingView } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { createProduct, updateProduct } from '../../store/actions/products';
 
@@ -71,59 +71,68 @@ const ProductEditScreen = ({ route, navigation }) => {
     );
 
     return (
-        <ScrollView>
-            <View style={styles.form}>
-                <Input
-                    id="title"
-                    label="Title"
-                    errorText="Please enter a valid title"
-                    initialValue={saveData.title}
-                    initialIsValid={validData.title}
-                    onInputChanged={setSaveDataValue}
-                    autoCapitalize="sentences"
-                    autoCorrect
-                    vaidateRequired
-                />
-
-                <Input
-                    id="imageUrl"
-                    label="Image URL"
-                    errorText="Please enter a valid image url"
-                    initialValue={saveData.imageUrl}
-                    initialIsValid={validData.imageUrl}
-                    onInputChanged={setSaveDataValue}
-                    vaidateRequired
-                />
-
-                { ! data.price && (
+        <KeyboardAvoidingView
+            style={styles.wrapper}
+            behavior="height"
+            keyboardVerticalOffset={100}
+        >
+            <ScrollView>
+                <View style={styles.form}>
                     <Input
-                        id="price"
-                        label="Price"
-                        errorText="Please enter a valid price"
-                        keyboardType="number-pad"
-                        validateMin={0}
+                        id="title"
+                        label="Title"
+                        errorText="Please enter a valid title"
+                        initialValue={saveData.title}
+                        initialIsValid={validData.title}
                         onInputChanged={setSaveDataValue}
+                        autoCapitalize="sentences"
+                        autoCorrect
+                        vaidateRequired
                     />
-                )}
 
-                <Input
-                    id="description"
-                    label="Description"
-                    errorText="Please enter a valid description"
-                    initialValue={saveData.description}
-                    initialIsValid={true}
-                    onInputChanged={setSaveDataValue}
-                    autoCapitalize="sentences"
-                    autoCorrect
-                    multiline
-                    numberOfLines={3}
-                />
-            </View>
-        </ScrollView>
+                    <Input
+                        id="imageUrl"
+                        label="Image URL"
+                        errorText="Please enter a valid image url"
+                        initialValue={saveData.imageUrl}
+                        initialIsValid={validData.imageUrl}
+                        onInputChanged={setSaveDataValue}
+                        vaidateRequired
+                    />
+
+                    { ! data.price && (
+                        <Input
+                            id="price"
+                            label="Price"
+                            errorText="Please enter a valid price"
+                            keyboardType="number-pad"
+                            validateMin={0}
+                            onInputChanged={(label, value, isValid) => setSaveDataValue(label, parseFloat(value), isValid)}
+                        />
+                    )}
+
+                    <Input
+                        id="description"
+                        label="Description"
+                        errorText="Please enter a valid description"
+                        initialValue={saveData.description}
+                        initialIsValid={true}
+                        onInputChanged={setSaveDataValue}
+                        autoCapitalize="sentences"
+                        autoCorrect
+                        multiline
+                        numberOfLines={3}
+                    />
+                </View>
+            </ScrollView>
+        </KeyboardAvoidingView>
     );
 };
 
 const styles = StyleSheet.create({
+    wrapper: {
+        flex: 1,
+    },
     form: {
         margin: 20,
     },

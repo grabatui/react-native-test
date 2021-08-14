@@ -89,8 +89,10 @@ const Input = (props) => {
                 onBlur={onInputBlured}
             />
 
-            { ! inputState.isValid && (
-                <Text>{props.errorText}</Text>
+            { ! inputState.isValid && inputState.touched && (
+                <View style={styles.errorWrapper}>
+                    <Text style={styles.error}>{props.errorText}</Text>
+                </View>
             )}
         </View>
     );
@@ -109,6 +111,14 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         borderBottomColor: '#ccc',
         borderBottomWidth: 1,
+    },
+    errorWrapper: {
+        marginVertical: 5,
+    },
+    error: {
+        fontFamily: 'open-sans',
+        color: 'red',
+        fontSize: 13,
     },
 });
 
