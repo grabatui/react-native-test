@@ -8,7 +8,7 @@ import Input from '../../components/Input';
 
 const ProductEditScreen = ({ route, navigation }) => {
     const data = route.params.data || {};
-    const { title, imageUrl, price } = data;
+    const { id, title, imageUrl, price } = data;
 
     const [saveData, setSaveData] = useState(data);
     const [validData, setValidData] = useState({
@@ -50,9 +50,9 @@ const ProductEditScreen = ({ route, navigation }) => {
                 }
             }
 
-            if (data && data.id) {
+            if (data && id) {
                 dispatch(
-                    updateProduct(data.id, saveData)
+                    updateProduct(id, saveData)
                 );
             } else {
                 dispatch(
@@ -62,12 +62,17 @@ const ProductEditScreen = ({ route, navigation }) => {
 
             navigation.goBack();
         },
-        [saveData, validData]
+        [id, saveData, validData]
     );
 
     useEffect(
         () => navigation.setParams({onSubmit}),
         [onSubmit]
+    );
+
+    const onPriceInputChanged = useCallback(
+        (label, value, isValid) => setSaveDataValue(label, parseFloat(value), isValid),
+        [id]
     );
 
     return (
@@ -107,7 +112,7 @@ const ProductEditScreen = ({ route, navigation }) => {
                             errorText="Please enter a valid price"
                             keyboardType="number-pad"
                             validateMin={0}
-                            onInputChanged={(label, value, isValid) => setSaveDataValue(label, parseFloat(value), isValid)}
+                            onInputChanged={onPriceInputChanged}
                         />
                     )}
 
