@@ -10,9 +10,26 @@ export const deleteProduct = (id) => {
 };
 
 export const createProduct = (data) => {
-    return {
-        type: CREATE_PRODUCT,
-        data,
+    return async (dispatch) => {
+        const response = await fetch(
+            'https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products.json',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            }
+        );
+
+        const responseData = await response.json();
+
+        data.id = responseData.name;
+
+        dispatch({
+            type: CREATE_PRODUCT,
+            data,
+        });
     };
 };
 

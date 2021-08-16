@@ -16,7 +16,7 @@ export default (state = initialState, action) => {
 
         case CREATE_PRODUCT:
             const addProduct = new Product();
-            addProduct.id = 'p' + (state.available.length + 1);
+            addProduct.id = action.data.id;
             addProduct.ownerId = 'u1';
             addProduct.title = action.data.title;
             addProduct.imageUrl = action.data.imageUrl;
