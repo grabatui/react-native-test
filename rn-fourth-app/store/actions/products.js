@@ -1,6 +1,9 @@
+import Product from "../../models/product";
+
 export const DELETE_PRODUCT = 'DELETE_PRODUCT';
 export const CREATE_PRODUCT = 'CREATE_PRODUCT';
 export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
+export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 export const deleteProduct = (id) => {
     return {
@@ -38,5 +41,29 @@ export const updateProduct = (id, data) => {
         type: UPDATE_PRODUCT,
         id,
         data,
+    };
+};
+
+export const setProducts = () => {
+    return async (dispatch) => {
+        const response = await fetch(
+            'https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products.json'
+        );
+
+        const responseData = await response.json();
+
+        const products = [];
+        for (const code in responseData) {
+            products.push(Product.make({
+                ...responseData[code],
+                id: code,
+                ownerId: 'u1',
+            }));
+        }
+
+        dispatch({
+            type: SET_PRODUCTS,
+            products,
+        })
     };
 };

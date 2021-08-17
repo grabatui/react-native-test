@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, Button } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ProductItem from '../../components/shop/ProductItem';
 import { addToCart } from '../../store/actions/cart';
+import { setProducts } from '../../store/actions/products';
 
 import colors from '../../constants/colors';
 
@@ -12,6 +13,15 @@ const ProductListScreen = ({ navigation }) => {
     const products = useSelector((state) => state.products.available);
 
     const dispatch = useDispatch();
+
+    useEffect(
+        () => {
+            dispatch(
+                setProducts()
+            )
+        },
+        [dispatch]
+    );
 
     const onSelectPress = (item) => navigation.navigate('Product', {data: item});
 
