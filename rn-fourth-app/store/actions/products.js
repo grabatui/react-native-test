@@ -46,24 +46,34 @@ export const updateProduct = (id, data) => {
 
 export const setProducts = () => {
     return async (dispatch) => {
-        const response = await fetch(
-            'https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products.json'
-        );
+        try {
+            const response = await fetch(
+                'https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products.json'
+            );
 
-        const responseData = await response.json();
+            if ( ! response.ok) {
+                throw new Error('Something went wrong');
+            }
+    
+            const responseData = await response.json();
+    
+            const products = [];
+            for (const code in responseData) {
+                products.push(Product.make({
+                    ...responseData[code],
+                    id: code,
+                    ownerId: 'u1',
+                }));
+            }
+    
+            dispatch({
+                type: SET_PRODUCTS,
+                products,
+            });
+        } catch (error) {
+            console.error(error);
 
-        const products = [];
-        for (const code in responseData) {
-            products.push(Product.make({
-                ...responseData[code],
-                id: code,
-                ownerId: 'u1',
-            }));
+            throw error;
         }
-
-        dispatch({
-            type: SET_PRODUCTS,
-            products,
-        })
     };
 };
