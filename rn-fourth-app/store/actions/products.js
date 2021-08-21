@@ -6,9 +6,16 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 export const deleteProduct = (id) => {
-    return {
-        type: DELETE_PRODUCT,
-        id,
+    return async (dispatch) => {
+        await fetch(
+            `https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products/${id}.json`,
+            {method: 'DELETE'}
+        );
+
+        dispatch({
+            type: DELETE_PRODUCT,
+            id,
+        });
     };
 };
 
@@ -37,10 +44,27 @@ export const createProduct = (data) => {
 };
 
 export const updateProduct = (id, data) => {
-    return {
-        type: UPDATE_PRODUCT,
-        id,
-        data,
+    return async (dispatch) => {
+        await fetch(
+            `https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products/${id}.json`,
+            {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    title: data.title,
+                    imageUrl: data.imageUrl,
+                    description: data.description,
+                }),
+            }
+        );
+
+        dispatch({
+            type: UPDATE_PRODUCT,
+            id,
+            data,
+        });
     };
 };
 

@@ -33,6 +33,13 @@ const ProductListScreen = ({ navigation }) => {
 
     useEffect(
         () => {
+            navigation.addListener('focus', loadProducts);
+        },
+        [loadProducts]
+    );
+
+    useEffect(
+        () => {
             loadProducts();
         },
         [loadProducts]
