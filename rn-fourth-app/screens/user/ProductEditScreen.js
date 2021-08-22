@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, StyleSheet, Alert, KeyboardAvoidingView } from 'react-native';
+import { View, ScrollView, StyleSheet, Alert, KeyboardAvoidingView, ActivityIndicator } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { createProduct, updateProduct } from '../../store/actions/products';
 
@@ -9,6 +9,9 @@ import Input from '../../components/Input';
 const ProductEditScreen = ({ route, navigation }) => {
     const data = route.params.data || {};
     const { id, title, imageUrl, price } = data;
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState();
 
     const [saveData, setSaveData] = useState(data);
     const [validData, setValidData] = useState({
@@ -35,7 +38,7 @@ const ProductEditScreen = ({ route, navigation }) => {
     const dispatch = useDispatch();
 
     const onSubmit = useCallback(
-        () => {
+        async () => {
             for (let validDataField of Object.keys(validData)) {
                 if ( ! validData[validDataField]) {
                     Alert.alert(
@@ -50,17 +53,26 @@ const ProductEditScreen = ({ route, navigation }) => {
                 }
             }
 
-            if (data && id) {
-                dispatch(
-                    updateProduct(id, saveData)
-                );
-            } else {
-                dispatch(
-                    createProduct(saveData)
-                )
+            setIsLoading(true);
+            setError(null);
+
+            try {
+                if (data && id) {
+                    await dispatch(
+                        updateProduct(id, saveData)
+                    );
+                } else {
+                    await dispatch(
+                        createProduct(saveData)
+                    )
+                }
+
+                navigation.goBack();
+            } catch (dispatchError) {
+                setError(dispatchError.message);
             }
 
-            navigation.goBack();
+            setIsLoading(false);
         },
         [id, saveData, validData]
     );
@@ -70,10 +82,33 @@ const ProductEditScreen = ({ route, navigation }) => {
         [onSubmit]
     );
 
+    useEffect(
+        () => {
+            if (error) {
+                Alert.alert(
+                    'An error occured!',
+                    error,
+                    [
+                        {text: 'Okay'}
+                    ]
+                );
+            }
+        },
+        [error]
+    );
+
     const onPriceInputChanged = useCallback(
         (label, value, isValid) => setSaveDataValue(label, parseFloat(value), isValid),
         [id]
     );
+
+    if (isLoading) {
+        return (
+            <View style={styles.loader}>
+                <ActivityIndicator size="large" color={colors.primary} />
+            </View>
+        );
+    }
 
     return (
         <KeyboardAvoidingView
@@ -140,6 +175,11 @@ const styles = StyleSheet.create({
     },
     form: {
         margin: 20,
+    },
+    loader: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });
 

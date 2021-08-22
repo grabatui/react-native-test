@@ -7,10 +7,14 @@ export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 export const deleteProduct = (id) => {
     return async (dispatch) => {
-        await fetch(
+        const response = await fetch(
             `https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products/${id}.json`,
             {method: 'DELETE'}
         );
+
+        if ( ! response.ok) {
+            throw new Error('Something went wrong');
+        }
 
         dispatch({
             type: DELETE_PRODUCT,
@@ -32,6 +36,10 @@ export const createProduct = (data) => {
             }
         );
 
+        if ( ! response.ok) {
+            throw new Error('Something went wrong');
+        }
+
         const responseData = await response.json();
 
         data.id = responseData.name;
@@ -45,7 +53,7 @@ export const createProduct = (data) => {
 
 export const updateProduct = (id, data) => {
     return async (dispatch) => {
-        await fetch(
+        const response = await fetch(
             `https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products/${id}.json`,
             {
                 method: 'PATCH',
@@ -59,6 +67,10 @@ export const updateProduct = (id, data) => {
                 }),
             }
         );
+
+        if ( ! response.ok) {
+            throw new Error('Something went wrong');
+        }
 
         dispatch({
             type: UPDATE_PRODUCT,
