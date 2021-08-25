@@ -8,15 +8,15 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case ADD_ORDER:
-            const { cartItems, totalAmount } = action;
+            const { id, cartItems, totalAmount, date } = action;
 
             const order = new Order(
                 cartItems,
                 totalAmount,
-                new Date()
+                date
             );
 
-            order.id = new Date().getTime();
+            order.id = id;
 
             state.all.push(order);
             break;
