@@ -11,6 +11,7 @@ import colors from '../../constants/colors';
 
 const ProductListScreen = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false);
     const [error, setError] = useState();
     const products = useSelector((state) => state.products.available);
 
@@ -18,15 +19,15 @@ const ProductListScreen = ({ navigation }) => {
 
     const loadProducts = useCallback(
         async () => {
-            setIsLoading(true);
-    
+            setIsRefreshing(true);
+
             try {
                 await dispatch(setProducts())
             } catch (exception) {
                 setError(exception.message);
             }
-    
-            setIsLoading(false);
+            
+            setIsRefreshing(false);
         },
         [dispatch, setIsLoading, setError]
     );
@@ -40,7 +41,10 @@ const ProductListScreen = ({ navigation }) => {
 
     useEffect(
         () => {
-            loadProducts();
+            setIsLoading(true);
+            loadProducts().then(() => {
+                setIsLoading(false);
+            });
         },
         [loadProducts]
     );
@@ -75,6 +79,8 @@ const ProductListScreen = ({ navigation }) => {
 
     return (
         <FlatList
+            onRefresh={loadProducts}
+            refreshing={isRefreshing}
             data={products}
             renderItem={({ item }) => (
                 <ProductItem
