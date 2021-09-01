@@ -12,6 +12,7 @@ import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
 import UserProductListScreen from '../screens/user/ProductListScreen';
 import UserProductEditScreen from '../screens/user/ProductEditScreen';
+import AuthScreen from '../screens/user/AuthScreen';
 
 import HeaderButton from '../components/HeaderButton';
 import OpenDrawerIcon from '../components/OpenDrawerIcon';
@@ -22,11 +23,15 @@ import colors from '../constants/colors';
 const Stack = createStackNavigator();
 const DrawerNavigator = createDrawerNavigator();
 
-const getDefaultScreenOptions = (navigation) => ({
+const getDefaultScreenOptions = () => ({
     headerStyle: styles.wrapperHeader,
     headerTintColor: Platform.OS === 'android' ? 'white' : colors.primary,
     headerTitleStyle: styles.headerBarTitle,
     headerBackTitleStyle: styles.headerBarBackTitle,
+});
+
+const getDefaultScreenOptionsWithDrawer = (navigation) => ({
+    ...getDefaultScreenOptions(),
     headerLeft: () => (
         <OpenDrawerIcon navigation={navigation} />
     ),
@@ -35,7 +40,7 @@ const getDefaultScreenOptions = (navigation) => ({
 const ProductsNavigator = ({ navigation }) => (
     <Stack.Navigator
         initialRouteName="Products"
-        screenOptions={getDefaultScreenOptions(navigation)}
+        screenOptions={getDefaultScreenOptionsWithDrawer(navigation)}
     >
         <Stack.Screen
             name="Products"
@@ -75,7 +80,7 @@ const ProductsNavigator = ({ navigation }) => (
 const OrdersNavigator = ({ navigation }) => (
     <Stack.Navigator
         initialRouteName="Orders"
-        screenOptions={getDefaultScreenOptions(navigation)}
+        screenOptions={getDefaultScreenOptionsWithDrawer(navigation)}
     >
         <Stack.Screen
             name="Orders"
@@ -90,7 +95,7 @@ const OrdersNavigator = ({ navigation }) => (
 const AdminNavigator = ({ navigation }) => (
     <Stack.Navigator
         initialRouteName="UserProducts"
-        screenOptions={getDefaultScreenOptions(navigation)}
+        screenOptions={getDefaultScreenOptionsWithDrawer(navigation)}
     >
         <Stack.Screen
             name="UserProducts"
@@ -132,57 +137,75 @@ const AdminNavigator = ({ navigation }) => (
     </Stack.Navigator>
 );
 
+const AuthNavigator = ({ navigation }) => (
+    <Stack.Navigator
+        initialRouteName="Auth"
+        screenOptions={getDefaultScreenOptions()}
+    >
+        <Stack.Screen
+            name="SignIn"
+            component={AuthScreen}
+            options={{
+                headerTitle: 'Authenticate',
+            }}
+        />
+    </Stack.Navigator>
+);
+
 const ShopNavigation = () => (
     <NavigationContainer>
-        <DrawerNavigator.Navigator
-            drawerContentOptions={{
-                activeTintColor: colors.primary,
-            }}
-        >
-            <DrawerNavigator.Screen
-                name="Products"
-                component={ProductsNavigator}
-                options={{
-                    drawerIcon: ({ size, color }) => (
-                        <Ionicons
-                            name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-                            size={size}
-                            color={color}
-                        />
-                    ),
+        {true
+            ? <AuthNavigator />
+            : <DrawerNavigator.Navigator
+                drawerContentOptions={{
+                    activeTintColor: colors.primary,
                 }}
-            />
+            >
+                <DrawerNavigator.Screen
+                    name="Products"
+                    component={ProductsNavigator}
+                    options={{
+                        drawerIcon: ({ size, color }) => (
+                            <Ionicons
+                                name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+                                size={size}
+                                color={color}
+                            />
+                        ),
+                    }}
+                />
 
-            <DrawerNavigator.Screen
-                name="Orders"
-                component={OrdersNavigator}
-                options={{
-                    drawerIcon: ({ size, color }) => (
-                        <Ionicons
-                            name={Platform.OS === 'android' ? 'md-list' : 'ios-list'}
-                            size={size}
-                            color={color}
-                        />
-                    ),
-                }}
-            />
+                <DrawerNavigator.Screen
+                    name="Orders"
+                    component={OrdersNavigator}
+                    options={{
+                        drawerIcon: ({ size, color }) => (
+                            <Ionicons
+                                name={Platform.OS === 'android' ? 'md-list' : 'ios-list'}
+                                size={size}
+                                color={color}
+                            />
+                        ),
+                    }}
+                />
 
-            <DrawerNavigator.Screen
-                name="Admin"
-                component={AdminNavigator}
-                options={{
-                    drawerIcon: ({ size, color }) => (
-                        <Ionicons
-                            name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
-                            size={size}
-                            color={color}
-                        />
-                    ),
-                }}
-            />
-        </DrawerNavigator.Navigator>
+                <DrawerNavigator.Screen
+                    name="Admin"
+                    component={AdminNavigator}
+                    options={{
+                        drawerIcon: ({ size, color }) => (
+                            <Ionicons
+                                name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
+                                size={size}
+                                color={color}
+                            />
+                        ),
+                    }}
+                />
+            </DrawerNavigator.Navigator>
+        }
     </NavigationContainer>
-)
+);
 
 const styles = StyleSheet.create({
     wrapperHeader: {
