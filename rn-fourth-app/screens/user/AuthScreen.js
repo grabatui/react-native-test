@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import Input from '../../components/Input';
 import colors from '../../constants/colors';
-import { signUp } from '../../store/actions/auth';
+import { signUp, signIn } from '../../store/actions/auth';
 
 
 const AuthScreen = () => {
@@ -16,6 +16,7 @@ const AuthScreen = () => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
+    const [isSignup, setSignup] = useState(false);
 
     const [saveData, setSaveData] = useState(data);
     const [validData, setValidData] = useState({
@@ -40,7 +41,7 @@ const AuthScreen = () => {
 
     const dispatch = useDispatch();
 
-    const onSignUpPressed = useCallback(
+    const onButtonPressed = useCallback(
         async () => {
             for (let validDataField of Object.keys(validData)) {
                 if ( ! validData[validDataField]) {
@@ -60,9 +61,11 @@ const AuthScreen = () => {
             setError(null);
 
             try {
-                dispatch(
-                    signUp(saveData.email, saveData.password)
-                );
+                const action = isSignup
+                    ? signUp(saveData.email, saveData.password)
+                    : signIn(saveData.email, saveData.password);
+
+                dispatch(action);
             } catch (dispatchError) {
                 setError(dispatchError.message);
             }
@@ -135,17 +138,19 @@ const AuthScreen = () => {
 
                         <View style={styles.button}>
                             <Button
-                                title="Login"
+                                title={isSignup ? 'Sign up' : 'Sign in'}
                                 color={colors.primary}
-                                onPress={onSignUpPressed}
+                                onPress={onButtonPressed}
                             />
                         </View>
 
                         <View style={styles.button}>
                             <Button
-                                title="Switch to Sign up"
+                                title={'Switch to ' + (isSignup ? 'Sign in' : 'Sign up')}
                                 color={colors.accent}
-                                onPress={() => {}}
+                                onPress={() => {
+                                    setSignup((state) => ! state);
+                                }}
                             />
                         </View>
                     </ScrollView>
