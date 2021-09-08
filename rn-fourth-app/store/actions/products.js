@@ -6,9 +6,11 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT';
 export const SET_PRODUCTS = 'SET_PRODUCTS';
 
 export const deleteProduct = (id) => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const { token } = getState().auth;
+
         const response = await fetch(
-            `https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products/${id}.json`,
+            `https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products/${id}.json?auth=${token}`,
             {method: 'DELETE'}
         );
 
@@ -24,9 +26,11 @@ export const deleteProduct = (id) => {
 };
 
 export const createProduct = (data) => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const { token } = getState().auth;
+
         const response = await fetch(
-            'https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products.json',
+            `https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=${token}`,
             {
                 method: 'POST',
                 headers: {
@@ -52,9 +56,11 @@ export const createProduct = (data) => {
 };
 
 export const updateProduct = (id, data) => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const { token } = getState().auth;
+
         const response = await fetch(
-            `https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products/${id}.json`,
+            `https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products/${id}.json?auth=${token}`,
             {
                 method: 'PATCH',
                 headers: {
@@ -81,7 +87,9 @@ export const updateProduct = (id, data) => {
 };
 
 export const setProducts = () => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const { userId } = getState().auth;
+
         try {
             const response = await fetch(
                 'https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products.json'
@@ -98,7 +106,7 @@ export const setProducts = () => {
                 products.push(Product.make({
                     ...responseData[code],
                     id: code,
-                    ownerId: 'u1',
+                    ownerId: userId,
                 }));
             }
     

@@ -10,6 +10,7 @@ import ShopNavigation from './navigation/ShopNavigation';
 import productsReducer from './store/reducers/products';
 import cartReducer from './store/reducers/cart';
 import ordersReducer from './store/reducers/order';
+import authReducer from './store/reducers/auth';
 
 
 const store = createStore(
@@ -17,6 +18,7 @@ const store = createStore(
         products: productsReducer,
         cart: cartReducer,
         orders: ordersReducer,
+        auth: authReducer,
     }),
     applyMiddleware(thunk)
 );

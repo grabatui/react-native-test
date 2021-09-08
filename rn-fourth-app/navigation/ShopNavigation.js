@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { Ionicons } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
 
 import ProductListScreen from '../screens/shop/ProductListScreen';
 import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
@@ -137,7 +138,7 @@ const AdminNavigator = ({ navigation }) => (
     </Stack.Navigator>
 );
 
-const AuthNavigator = ({ navigation }) => (
+const AuthNavigator = () => (
     <Stack.Navigator
         initialRouteName="Auth"
         screenOptions={getDefaultScreenOptions()}
@@ -152,60 +153,64 @@ const AuthNavigator = ({ navigation }) => (
     </Stack.Navigator>
 );
 
-const ShopNavigation = () => (
-    <NavigationContainer>
-        {true
-            ? <AuthNavigator />
-            : <DrawerNavigator.Navigator
-                drawerContentOptions={{
-                    activeTintColor: colors.primary,
-                }}
-            >
-                <DrawerNavigator.Screen
-                    name="Products"
-                    component={ProductsNavigator}
-                    options={{
-                        drawerIcon: ({ size, color }) => (
-                            <Ionicons
-                                name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
-                                size={size}
-                                color={color}
-                            />
-                        ),
-                    }}
-                />
+const ShopNavigation = () => {
+    const { token, userId } = useSelector((state) => state.auth);
 
-                <DrawerNavigator.Screen
-                    name="Orders"
-                    component={OrdersNavigator}
-                    options={{
-                        drawerIcon: ({ size, color }) => (
-                            <Ionicons
-                                name={Platform.OS === 'android' ? 'md-list' : 'ios-list'}
-                                size={size}
-                                color={color}
-                            />
-                        ),
+    return (
+        <NavigationContainer>
+            { ! token || ! userId
+                ? <AuthNavigator />
+                : <DrawerNavigator.Navigator
+                    drawerContentOptions={{
+                        activeTintColor: colors.primary,
                     }}
-                />
-
-                <DrawerNavigator.Screen
-                    name="Admin"
-                    component={AdminNavigator}
-                    options={{
-                        drawerIcon: ({ size, color }) => (
-                            <Ionicons
-                                name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
-                                size={size}
-                                color={color}
-                            />
-                        ),
-                    }}
-                />
-            </DrawerNavigator.Navigator>
-        }
-    </NavigationContainer>
-);
+                >
+                    <DrawerNavigator.Screen
+                        name="Products"
+                        component={ProductsNavigator}
+                        options={{
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name={Platform.OS === 'android' ? 'md-cart' : 'ios-cart'}
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+    
+                    <DrawerNavigator.Screen
+                        name="Orders"
+                        component={OrdersNavigator}
+                        options={{
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name={Platform.OS === 'android' ? 'md-list' : 'ios-list'}
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+    
+                    <DrawerNavigator.Screen
+                        name="Admin"
+                        component={AdminNavigator}
+                        options={{
+                            drawerIcon: ({ size, color }) => (
+                                <Ionicons
+                                    name={Platform.OS === 'android' ? 'md-create' : 'ios-create'}
+                                    size={size}
+                                    color={color}
+                                />
+                            ),
+                        }}
+                    />
+                </DrawerNavigator.Navigator>
+            }
+        </NavigationContainer>
+    );
+};
 
 const styles = StyleSheet.create({
     wrapperHeader: {

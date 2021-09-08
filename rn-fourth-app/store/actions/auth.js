@@ -38,6 +38,8 @@ export const signUp = (email, password) => {
 
         dispatch({
             type: SIGN_UP,
+            token: signUpData.idToken,
+            userId: signUpData.localId,
         });
     };
 };
@@ -79,6 +81,8 @@ export const signIn = (email, password) => {
 
         dispatch({
             type: SIGN_IN,
+            token: signInData.idToken,
+            userId: signInData.localId,
         });
     };
 };

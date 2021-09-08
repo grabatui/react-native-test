@@ -6,11 +6,12 @@ export const SET_ORDERS = 'SET_ORDERS';
 
 
 export const addOrder = (cartItems, totalAmount) => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
         const date = new Date();
+        const { token, userId } = getState().auth;
 
         const response = await fetch(
-            'https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/orders/u1.json',
+            `https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/orders/${userId}.json?auth=${token}`,
             {
                 method: 'POST',
                 headers: {
@@ -41,10 +42,12 @@ export const addOrder = (cartItems, totalAmount) => {
 };
 
 export const setOrders = () => {
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
+        const { userId } = getState().auth;
+
         try {
             const response = await fetch(
-                'https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/orders/u1.json'
+                `https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/orders/${userId}.json`
             );
 
             if ( ! response.ok) {

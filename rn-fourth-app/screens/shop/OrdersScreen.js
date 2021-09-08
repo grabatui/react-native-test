@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { FlatList, View, ActivityIndicator, StyleSheet } from 'react-native';
+import { FlatList, View, ActivityIndicator, StyleSheet, Text } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import OrderItem from '../../components/shop/OrderItem';
