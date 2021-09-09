@@ -1,11 +1,10 @@
-import { PRODUCTS } from '../../data/dummy';
 import Product from '../../models/product';
 import { CREATE_PRODUCT, DELETE_PRODUCT, SET_PRODUCTS, UPDATE_PRODUCT } from '../actions/products';
 
 
 const initialState = {
-    available: PRODUCTS,
-    byUser: PRODUCTS.filter((product) => product.ownerId === 'u1'),
+    available: [],
+    byUser: [],
 };
 
 export default (state = initialState, action) => {
@@ -17,7 +16,7 @@ export default (state = initialState, action) => {
         case CREATE_PRODUCT:
             const addProduct = new Product();
             addProduct.id = action.data.id;
-            addProduct.ownerId = 'u1';
+            addProduct.ownerId = action.data.ownerId;
             addProduct.title = action.data.title;
             addProduct.imageUrl = action.data.imageUrl;
             addProduct.description = action.data.description;
@@ -41,7 +40,7 @@ export default (state = initialState, action) => {
             state = {
                 ...state,
                 available: action.products,
-                byUser: action.products.filter((product) => product.ownerId === 'u1'),
+                byUser: action.userProducts,
             }
             break;
     }

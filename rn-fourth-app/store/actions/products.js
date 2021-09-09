@@ -27,7 +27,9 @@ export const deleteProduct = (id) => {
 
 export const createProduct = (data) => {
     return async (dispatch, getState) => {
-        const { token } = getState().auth;
+        const { token, userId } = getState().auth;
+
+        data.ownerId = userId;
 
         const response = await fetch(
             `https://react-test-fourth-shop-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=${token}`,
@@ -103,16 +105,19 @@ export const setProducts = () => {
     
             const products = [];
             for (const code in responseData) {
-                products.push(Product.make({
-                    ...responseData[code],
-                    id: code,
-                    ownerId: userId,
-                }));
+                products.push(
+                    Product.make({
+                        ...responseData[code],
+                        id: code,
+                        ownerId: userId,
+                    })
+                );
             }
     
             dispatch({
                 type: SET_PRODUCTS,
                 products,
+                userProducts: products.filter((product) => product.ownerId === userId),
             });
         } catch (error) {
             console.error(error);
