@@ -2,10 +2,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ScrollView, StyleSheet, View, KeyboardAvoidingView, Button, ActivityIndicator, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useDispatch } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Input from '../../components/Input';
 import colors from '../../constants/colors';
-import { signUp, signIn } from '../../store/actions/auth';
+import { signUp, signIn, authenticate } from '../../store/actions/auth';
 
 
 const AuthScreen = () => {
@@ -17,6 +18,7 @@ const AuthScreen = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState();
     const [isSignup, setSignup] = useState(false);
+    const [authUserDataLoaded, setAuthUserDataLoaded] = useState(false);
 
     const [saveData, setSaveData] = useState(data);
     const [validData, setValidData] = useState({
@@ -40,6 +42,35 @@ const AuthScreen = () => {
     );
 
     const dispatch = useDispatch();
+
+    useEffect(
+        () => {
+            const tryLoadStageAuthData = async () => {
+                const authUserData = await AsyncStorage.getItem('authUserData');
+
+                if ( ! authUserData) {
+                    setAuthUserDataLoaded(true);
+
+                    return;
+                }
+
+                const { token, userId, expirationDate } = JSON.parse(authUserData);
+
+                if (new Date(expirationDate) <= new Date() || ! token || ! userId) {
+                    setAuthUserDataLoaded(true);
+
+                    return;
+                }
+
+                await dispatch(
+                    authenticate(token, userId)
+                );
+            };
+
+            tryLoadStageAuthData();
+        },
+        [dispatch]
+    );
 
     const onButtonPressed = useCallback(
         async () => {
@@ -89,6 +120,14 @@ const AuthScreen = () => {
         },
         [error]
     );
+
+    if ( ! authUserDataLoaded) {
+        return (
+            <View style={styles.loader}>
+                <ActivityIndicator size="large" color={colors.primary} />
+            </View>
+        );
+    }
 
     return (
         <KeyboardAvoidingView

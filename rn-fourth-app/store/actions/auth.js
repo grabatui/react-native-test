@@ -1,8 +1,8 @@
 import { GOOGLE_FIREBASE_API_KEY } from '@env'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
-export const SIGN_UP = 'SUGN_UP';
-export const SIGN_IN = 'SIGN_IN';
+export const AUTHENTICATE = 'AUTHENTICATE';
 
 export const signUp = (email, password) => {
     return async (dispatch) => {
@@ -36,11 +36,11 @@ export const signUp = (email, password) => {
             throw new Error(errorMessage);
         }
 
-        dispatch({
-            type: SIGN_UP,
-            token: signUpData.idToken,
-            userId: signUpData.localId,
-        });
+        dispatch(
+            authenticate(signUpData.idToken, signUpData.localId)
+        )
+
+        saveAuthUserDataToStorage(signUpData.idToken, signUpData.localId, signUpData.expiresIn);
     };
 };
 
@@ -79,10 +79,33 @@ export const signIn = (email, password) => {
             throw new Error(errorMessage);
         }
 
+        dispatch(
+            authenticate(signInData.idToken, signInData.localId)
+        )
+
+        saveAuthUserDataToStorage(signInData.idToken, signInData.localId, signInData.expiresIn);
+    };
+};
+
+export const authenticate = (token, userId) => {
+    return (dispatch) => {
         dispatch({
-            type: SIGN_IN,
-            token: signInData.idToken,
-            userId: signInData.localId,
+            type: AUTHENTICATE,
+            token,
+            userId,
         });
     };
+};
+
+const saveAuthUserDataToStorage = (token, userId, expiresIn) => {
+    const expirationDate = new Date(new Date().getTime() + (parseInt(expiresIn) * 1000)).toISOString();
+
+    AsyncStorage.setItem(
+        'authUserData',
+        JSON.stringify({
+            token,
+            userId,
+            expirationDate,
+        })
+    );
 };
