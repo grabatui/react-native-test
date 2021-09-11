@@ -17,6 +17,7 @@ import AuthScreen from '../screens/user/AuthScreen';
 
 import HeaderButton from '../components/HeaderButton';
 import OpenDrawerIcon from '../components/OpenDrawerIcon';
+import DrawerLogout from '../components/DrawerLogout';
 
 import colors from '../constants/colors';
 
@@ -164,6 +165,7 @@ const ShopNavigation = () => {
                     drawerContentOptions={{
                         activeTintColor: colors.primary,
                     }}
+                    drawerContent={DrawerLogout}
                 >
                     <DrawerNavigator.Screen
                         name="Products"
