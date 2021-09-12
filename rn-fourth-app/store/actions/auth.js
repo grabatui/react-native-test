@@ -5,6 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const AUTHENTICATE = 'AUTHENTICATE';
 export const LOGOUT = 'LOGOUT';
 
+let autoLogoutTimer;
+
 export const signUp = (email, password) => {
     return async (dispatch) => {
         const response = await fetch(
@@ -38,7 +40,7 @@ export const signUp = (email, password) => {
         }
 
         dispatch(
-            authenticate(signUpData.idToken, signUpData.localId)
+            authenticate(signUpData.idToken, signUpData.localId, parseInt(signUpData.expiresIn) * 1000)
         )
 
         saveAuthUserDataToStorage(signUpData.idToken, signUpData.localId, signUpData.expiresIn);
@@ -81,15 +83,19 @@ export const signIn = (email, password) => {
         }
 
         dispatch(
-            authenticate(signInData.idToken, signInData.localId)
+            authenticate(signInData.idToken, signInData.localId, parseInt(signInData.expiresIn) * 1000)
         )
 
         saveAuthUserDataToStorage(signInData.idToken, signInData.localId, signInData.expiresIn);
     };
 };
 
-export const authenticate = (token, userId) => {
+export const authenticate = (token, userId, expirationTime) => {
     return (dispatch) => {
+        dispatch(
+            setLogoutTimer(expirationTime)
+        );
+
         dispatch({
             type: AUTHENTICATE,
             token,
@@ -99,6 +105,10 @@ export const authenticate = (token, userId) => {
 };
 
 export const logout = () => {
+    clearLogoutTimer();
+
+    AsyncStorage.removeItem('authUserData');
+
     return {
         type: LOGOUT,
     };
@@ -115,4 +125,19 @@ const saveAuthUserDataToStorage = (token, userId, expiresIn) => {
             expirationDate,
         })
     );
+};
+
+const clearLogoutTimer = () => {
+    if (autoLogoutTimer) {
+        clearTimeout(autoLogoutTimer);
+    }
+};
+
+const setLogoutTimer = (expirationTime) => {
+    return (dispatch) => {
+        autoLogoutTimer = setTimeout(
+            () => dispatch(logout()),
+            expirationTime
+        );
+    };
 };

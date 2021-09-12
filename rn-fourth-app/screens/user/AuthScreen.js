@@ -62,8 +62,10 @@ const AuthScreen = () => {
                     return;
                 }
 
+                const expirationTime = new Date(expirationDate).getTime() - new Date().getTime();
+
                 await dispatch(
-                    authenticate(token, userId)
+                    authenticate(token, userId, expirationTime)
                 );
             };
 

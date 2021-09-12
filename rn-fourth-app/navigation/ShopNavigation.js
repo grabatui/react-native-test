@@ -165,7 +165,9 @@ const ShopNavigation = () => {
                     drawerContentOptions={{
                         activeTintColor: colors.primary,
                     }}
-                    drawerContent={DrawerLogout}
+                    drawerContent={(props) => (
+                        <DrawerLogout {...props} />
+                    )}
                 >
                     <DrawerNavigator.Screen
                         name="Products"
