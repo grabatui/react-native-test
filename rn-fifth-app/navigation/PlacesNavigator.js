@@ -45,8 +45,8 @@ const PlacesNavigator = () => (
             <Stack.Screen
                 name="Place"
                 component={PlaceScreen}
-                options={() => ({
-                    headerTitle: 'Place',
+                options={({ route }) => ({
+                    headerTitle: route.params.data.title,
                 })}
             />
             
