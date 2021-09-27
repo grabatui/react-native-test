@@ -11,14 +11,14 @@ const EditPlaceScreen = ({ navigation }) => {
     const dispatch = useDispatch();
 
     const [titleValue, setTitleValue] = useState('');
+    const [imageValue, setImageValue] = useState('');
 
-    const onTitleChanged = (value) => {
-        setTitleValue(value);
-    };
+    const onTitleChanged = (value) => setTitleValue(value);
+    const onImageChanged = (value) => setImageValue(value);
 
     const onButtonPressed = () => {
         dispatch(
-            addPlace(titleValue)
+            addPlace(titleValue, imageValue)
         );
 
         navigation.goBack();
@@ -35,7 +35,10 @@ const EditPlaceScreen = ({ navigation }) => {
                     onChangeText={onTitleChanged}
                 />
 
-                <ImageSelector />
+                <ImageSelector
+                    onImageSelected={onImageChanged}
+                    initialValue={imageValue}
+                />
 
                 <Button
                     title="Save place"
@@ -53,12 +56,12 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 18,
-        marginBottom: 15,
+        marginBottom: 5,
     },
     input: {
         borderBottomColor: '#ccc',
         borderBottomWidth: 1,
-        marginBottom: 1,
+        marginBottom: 20,
         paddingVertical: 4,
         paddingHorizontal: 2,
     },

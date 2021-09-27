@@ -1,15 +1,17 @@
-import React, { useEffect } from "react";
-import { View, Button, Text, StyleSheet, Alert } from "react-native";
+import React, { useState } from "react";
+import { View, Button, Text, StyleSheet, Alert, Image } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 
 import colors from "../constants/colors";
 
 
-const ImageSelector = () => {
-    const verifyPermissions = async () => {
-        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+const ImageSelector = ({ initialValue, onImageSelected }) => {
+    const [selectedImage, setSelectedImage] = useState(initialValue);
 
-        if (status !== 'granted') {
+    const verifyPermissions = async () => {
+        const cameraResult = await ImagePicker.requestCameraPermissionsAsync();
+
+        if (cameraResult.status !== 'granted') {
             Alert.alert(
                 'Error!',
                 'Sorry, we need camera permissions to make this work!',
@@ -21,9 +23,9 @@ const ImageSelector = () => {
             return false;
         }
 
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        const mediaLibraryResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-        if (status !== 'granted') {
+        if (mediaLibraryResult.status !== 'granted') {
             Alert.alert(
                 'Error!',
                 'Sorry, we need camera roll permissions to make this work!',
@@ -45,19 +47,32 @@ const ImageSelector = () => {
             return;
         }
 
-        await ImagePicker.launchCameraAsync({
-            
+        const image = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            aspect: [16, 9],
+            quality: .5,
         });
+
+        if ( ! image.cancelled) {
+            setSelectedImage(image.uri);
+
+            onImageSelected(image.uri);
+        }
     };
 
     return (
         <View style={styles.wrapper}>
-            <View style={styles.previewText}>
-                <Text>Not image picked yet</Text>
-
-                <Image
-                    style={styles.image}
-                />
+            <View style={styles.previewImage}>
+                {selectedImage
+                    ? (
+                        <Image
+                            style={styles.image}
+                            source={{uri: selectedImage}}
+                        />
+                    )
+                    : (
+                        <Text>Not image picked yet</Text>
+                    )}
             </View>
 
             <Button
@@ -72,8 +87,9 @@ const ImageSelector = () => {
 const styles = StyleSheet.create({
     wrapper: {
         alignItems: 'center',
+        marginBottom: 15,
     },
-    previewText: {
+    previewImage: {
         width: '100%',
         height: 200,
         marginBottom: 10,

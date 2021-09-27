@@ -5,21 +5,23 @@ import colors from "../constants/colors";
 
 
 const Place = ({ data, onPress }) => {
-    let TouchableComponent = (Platform.OS == 'android' && Platform.Version > 21)
+    let TouchableComponent = (Platform.OS === 'android' && Platform.Version > 21)
         ? TouchableNativeFeedback
         : TouchableOpacity;
 
     return (
-        <TouchableComponent onPress={onPress} style={styles.wrapper}>
-            <Image
-                style={styles.image}
-                source={{ uri: data.image }}
-            />
+        <TouchableComponent onPress={onPress}>
+            <View style={styles.wrapper}>
+                <Image
+                    style={styles.image}
+                    source={{ uri: data.item.image }}
+                />
 
-            <View style={styles.infoWrapper}>
-                <Text style={styles.title}>{data.title}</Text>
-                
-                <Text style={styles.address}>{data.address}</Text>
+                <View style={styles.infoWrapper}>
+                    <Text style={styles.title}>{data.item.title}</Text>
+                    
+                    <Text style={styles.address}>{data.item.address}</Text>
+                </View>
             </View>
         </TouchableComponent>
     );

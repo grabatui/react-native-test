@@ -11,7 +11,8 @@ export default (state = initialState, action) => {
             state.all.push(
                 new Place(
                     new Date().toString(),
-                    action.title
+                    action.title,
+                    action.image
                 )
             );
             break;

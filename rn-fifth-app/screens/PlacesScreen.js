@@ -2,7 +2,7 @@ import React from "react";
 import { FlatList, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 
-import Place from "../models/Place";
+import Place from "../components/Place";
 
 
 const PlacesScreen = ({ navigation }) => {
