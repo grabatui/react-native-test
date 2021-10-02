@@ -17,7 +17,44 @@ export const initDatabase = () => {
                         longitude REAL NOT NULL
                     );`,
                     [],
-                    () => resolve(),
+                    (successTransaction, result) => resolve(result),
+                    (errorTransaction, error) => reject(error)
+                );
+            });
+        }
+    );
+};
+
+export const insertPlace = (title, image, address, latitude, longitude) => {
+    return new Promise(
+        (resolve, reject) => {
+            db.transaction((transaction) => {
+                transaction.executeSql(
+                    `INSERT INTO places (title, image, address, latitude, longitude)
+                    VALUES (?, ?, ?, ?, ?);`,
+                    [
+                        title,
+                        image,
+                        address,
+                        latitude,
+                        longitude,
+                    ],
+                    (successTransaction, result) => resolve(result),
+                    (errorTransaction, error) => reject(error)
+                );
+            });
+        }
+    );
+};
+
+export const getPlaces = () => {
+    return new Promise(
+        (resolve, reject) => {
+            db.transaction((transaction) => {
+                transaction.executeSql(
+                    `SELECT * FROM places;`,
+                    [],
+                    (successTransaction, result) => resolve(result),
                     (errorTransaction, error) => reject(error)
                 );
             });

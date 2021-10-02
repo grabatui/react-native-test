@@ -1,11 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import Place from "../components/Place";
+import { setPlaces } from "../store/actions/place";
 
 
 const PlacesScreen = ({ navigation }) => {
+    const dispatch = useDispatch();
+
+    useEffect(
+        () => {
+            dispatch(setPlaces());
+        },
+        [dispatch]
+    );
+
     const places = useSelector((state) => state.places.all);
 
     return (
