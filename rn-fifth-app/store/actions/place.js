@@ -18,16 +18,16 @@ export const addPlace = (title, image) => {
             });
 
             const insertResult = await insertPlace(title, newPath, 'Address', 0.0, 0.0);
+
+            dispatch({
+                type: ADD_PLACE,
+                id: insertResult.insertId,
+                title,
+                image: newPath,
+            });
         } catch (exception) {
             throw exception;
         }
-
-        dispatch({
-            type: ADD_PLACE,
-            id: insertResult.insertId,
-            title,
-            image: newPath,
-        });
     };
 };
 

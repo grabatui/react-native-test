@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import colors from "../constants/colors";
 import { addPlace } from "../store/actions/place";
 import ImageSelector from "../components/ImageSelector";
+import LocationSelector from "../components/LocationSelector";
 
 
 const EditPlaceScreen = ({ navigation }) => {
@@ -39,6 +40,8 @@ const EditPlaceScreen = ({ navigation }) => {
                     onImageSelected={onImageChanged}
                     initialValue={imageValue}
                 />
+
+                <LocationSelector />
 
                 <Button
                     title="Save place"
