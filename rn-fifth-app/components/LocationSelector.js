@@ -3,11 +3,15 @@ import { View, Button, Text, StyleSheet, ActivityIndicator, Alert } from 'react-
 import * as Location from 'expo-location';
 
 import colors from '../constants/colors'
+import MapPreview from './MapPreview';
 
 
 const LocationSelector = ({ onLocationSelected }) => {
     const [isFetching, setIsFetching] = useState(false);
-    const [selectedLocation, setSelectedLocation] = useState();
+    const [selectedLocation, setSelectedLocation] = useState({
+        longitude: null,
+        latitude: null,
+    });
 
     const verifyPermissions = async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
@@ -60,14 +64,18 @@ const LocationSelector = ({ onLocationSelected }) => {
 
     return (
         <View style={styles.wrapper}>
-            <View style={styles.text}>
+            <MapPreview
+                style={styles.image}
+                longitude={selectedLocation.longitude}
+                latitude={selectedLocation.latitude}
+            >
                 {isFetching
                     ? <ActivityIndicator
                         size="large"
                         color={colors.primary}
                     />
                     : <Text>No location selected yet!</Text>}
-            </View>
+            </MapPreview>
 
             <Button
                 title="Get User Location"
@@ -82,14 +90,12 @@ const styles = StyleSheet.create({
     wrapper: {
         marginBottom: 15,
     },
-    text: {
+    image: {
         marginBottom: 10,
         width: '100%',
         height: 150,
         borderColor: '#ccc',
         borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
 });
 
