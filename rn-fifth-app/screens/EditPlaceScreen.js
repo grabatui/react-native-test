@@ -41,7 +41,9 @@ const EditPlaceScreen = ({ navigation }) => {
                     initialValue={imageValue}
                 />
 
-                <LocationSelector />
+                <LocationSelector
+                    navigation={navigation}
+                />
 
                 <Button
                     title="Save place"

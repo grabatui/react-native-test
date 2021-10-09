@@ -6,7 +6,7 @@ import colors from '../constants/colors'
 import MapPreview from './MapPreview';
 
 
-const LocationSelector = ({ onLocationSelected }) => {
+const LocationSelector = ({ onLocationSelected, navigation }) => {
     const [isFetching, setIsFetching] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState({
         longitude: null,
@@ -31,7 +31,7 @@ const LocationSelector = ({ onLocationSelected }) => {
         return true;
     };
 
-    const onButtonPress = async () => {
+    const onGetUserLocationPress = async () => {
         const hasPermission = await verifyPermissions();
 
         if ( ! hasPermission) {
@@ -62,12 +62,17 @@ const LocationSelector = ({ onLocationSelected }) => {
         setIsFetching(false);
     };
 
+    const onPickOnMapPress = () => {
+        navigation.navigate('Map');
+    };
+
     return (
         <View style={styles.wrapper}>
             <MapPreview
                 style={styles.image}
                 longitude={selectedLocation.longitude}
                 latitude={selectedLocation.latitude}
+                onPressed={onPickOnMapPress}
             >
                 {isFetching
                     ? <ActivityIndicator
@@ -77,11 +82,18 @@ const LocationSelector = ({ onLocationSelected }) => {
                     : <Text>No location selected yet!</Text>}
             </MapPreview>
 
-            <Button
-                title="Get User Location"
-                color={colors.primary}
-                onPress={onButtonPress}
-            />
+            <View style={styles.actions}>
+                <Button
+                    title="Get User Location"
+                    color={colors.primary}
+                    onPress={onGetUserLocationPress}
+                />
+                <Button
+                    title="Pick on map"
+                    color={colors.primary}
+                    onPress={onPickOnMapPress}
+                />
+            </View>
         </View>
     );
 };
@@ -96,6 +108,11 @@ const styles = StyleSheet.create({
         height: 150,
         borderColor: '#ccc',
         borderWidth: 1,
+    },
+    actions: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        width: '100%',
     },
 });
 
