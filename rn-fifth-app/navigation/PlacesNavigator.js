@@ -38,10 +38,10 @@ const PlacesNavigator = () => (
                                 onPress={() => navigation.navigate('EditPlace')}
                             />
                         </HeaderButtons>
-                    )
+                    ),
                 })}
             />
-            
+
             <Stack.Screen
                 name="Place"
                 component={PlaceScreen}
@@ -49,7 +49,7 @@ const PlacesNavigator = () => (
                     headerTitle: route.params.data.title,
                 })}
             />
-            
+
             <Stack.Screen
                 name="EditPlace"
                 component={EditPlaceScreen}
@@ -57,12 +57,25 @@ const PlacesNavigator = () => (
                     headerTitle: 'Edit place',
                 })}
             />
-            
+
             <Stack.Screen
                 name="Map"
                 component={MapScreen}
-                options={() => ({
+                options={({ route }) => ({
                     headerTitle: 'Map',
+                    headerRight: () => {
+                        const onPressed = route.params.onSavePressed;
+
+                        return (
+                            <HeaderButtons HeaderButtonComponent={HeaderButton}>
+                                <Item
+                                    title="Save location"
+                                    iconName={Platform.OS === 'android' ? 'md-checkmark' : 'ios-checkmark'}
+                                    onPress={onPressed}
+                                />
+                            </HeaderButtons>
+                        );
+                    },
                 })}
             />
         </Stack.Navigator>

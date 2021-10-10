@@ -8,7 +8,7 @@ import ImageSelector from "../components/ImageSelector";
 import LocationSelector from "../components/LocationSelector";
 
 
-const EditPlaceScreen = ({ navigation }) => {
+const EditPlaceScreen = ({ route, navigation }) => {
     const dispatch = useDispatch();
 
     const [titleValue, setTitleValue] = useState('');
@@ -43,6 +43,7 @@ const EditPlaceScreen = ({ navigation }) => {
 
                 <LocationSelector
                     navigation={navigation}
+                    route={route}
                 />
 
                 <Button

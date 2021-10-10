@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Button, Text, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import * as Location from 'expo-location';
 
@@ -6,12 +6,23 @@ import colors from '../constants/colors'
 import MapPreview from './MapPreview';
 
 
-const LocationSelector = ({ onLocationSelected, navigation }) => {
+const LocationSelector = ({ route, navigation }) => {
     const [isFetching, setIsFetching] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState({
-        longitude: null,
-        latitude: null,
+        latitude: 0,
+        longitude: 0,
     });
+
+    const mapSelectedLocation = route.params?.selectedLocation;
+
+    useEffect(
+        () => {
+            if (mapSelectedLocation) {
+                setSelectedLocation(mapSelectedLocation);
+            }
+        },
+        [mapSelectedLocation]
+    );
 
     const verifyPermissions = async () => {
         const { status } = await Location.requestForegroundPermissionsAsync();
@@ -63,7 +74,7 @@ const LocationSelector = ({ onLocationSelected, navigation }) => {
     };
 
     const onPickOnMapPress = () => {
-        navigation.navigate('Map');
+        navigation.navigate('Map', {coordinates: selectedLocation});
     };
 
     return (
