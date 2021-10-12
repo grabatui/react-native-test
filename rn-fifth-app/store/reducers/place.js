@@ -12,7 +12,10 @@ export default (state = initialState, action) => {
                 new Place(
                     action.id.toString(),
                     action.title,
-                    action.image
+                    action.image,
+                    action.address,
+                    action.location.latitude,
+                    action.location.longitude,
                 )
             );
             break;
@@ -23,6 +26,9 @@ export default (state = initialState, action) => {
                     rawPlace.id.toString(),
                     rawPlace.title,
                     rawPlace.image,
+                    rawPlace.address,
+                    rawPlace.latitude,
+                    rawPlace.longitude,
                 )
             );
             break;

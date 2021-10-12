@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { ScrollView, View, Button, StyleSheet, Text, TextInput } from "react-native";
 import { useDispatch } from "react-redux";
 
@@ -13,13 +13,20 @@ const EditPlaceScreen = ({ route, navigation }) => {
 
     const [titleValue, setTitleValue] = useState('');
     const [imageValue, setImageValue] = useState('');
+    const [locationValue, setLocationValue] = useState();
 
     const onTitleChanged = (value) => setTitleValue(value);
     const onImageChanged = (value) => setImageValue(value);
+    const onLocationSelected = useCallback(
+        (value) => {
+            setLocationValue(value);
+        },
+        []
+    );
 
     const onButtonPressed = () => {
         dispatch(
-            addPlace(titleValue, imageValue)
+            addPlace(titleValue, imageValue, locationValue)
         );
 
         navigation.goBack();
@@ -44,6 +51,7 @@ const EditPlaceScreen = ({ route, navigation }) => {
                 <LocationSelector
                     navigation={navigation}
                     route={route}
+                    onLocationSelected={onLocationSelected}
                 />
 
                 <Button

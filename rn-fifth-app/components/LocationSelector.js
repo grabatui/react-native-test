@@ -6,7 +6,7 @@ import colors from '../constants/colors'
 import MapPreview from './MapPreview';
 
 
-const LocationSelector = ({ route, navigation }) => {
+const LocationSelector = ({ route, navigation, onLocationSelected }) => {
     const [isFetching, setIsFetching] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState({
         latitude: 0,
@@ -19,9 +19,10 @@ const LocationSelector = ({ route, navigation }) => {
         () => {
             if (mapSelectedLocation) {
                 setSelectedLocation(mapSelectedLocation);
+                onLocationSelected(mapSelectedLocation);
             }
         },
-        [mapSelectedLocation]
+        [mapSelectedLocation, onLocationSelected]
     );
 
     const verifyPermissions = async () => {
@@ -56,10 +57,13 @@ const LocationSelector = ({ route, navigation }) => {
                 timeInterval: 5000,
             });
 
-            setSelectedLocation({
+            const userSelectedLocation = {
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
-            });
+            };
+
+            setSelectedLocation(userSelectedLocation);
+            onLocationSelected(userSelectedLocation);
         } catch (error) {
             Alert.alert(
                 'Error!',
