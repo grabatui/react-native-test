@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, View, Image, StyleSheet } from 'react-native';
+import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 
 
 const MapPreview = ({ longitude, latitude, children, style, onPressed }) => {
