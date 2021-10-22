@@ -1,12 +1,22 @@
 import React from 'react';
-import { ScrollView, Image, View, StyleSheet } from 'react-native';
+import { ScrollView, Text, Image, View, StyleSheet } from 'react-native';
 
 import MapPreview from '../components/MapPreview';
 import colors from '../constants/colors';
 
 
-const PlaceScreen = ({ route }) => {
+const PlaceScreen = ({ route, navigation }) => {
     const place = route.params.data;
+
+    const onMapPressed = () => {
+        navigation.navigate('Map', {
+            readonly: true,
+            coordinates: {
+                longitude: place.longitude,
+                latitude: place.latitude,
+            },
+        });
+    };
 
     return (
         <ScrollView contentContainerStyle={styles.wrapper}>
@@ -24,6 +34,7 @@ const PlaceScreen = ({ route }) => {
                     longitude={place.longitude}
                     latitude={place.latitude}
                     styles={styles.mapPreview}
+                    onPressed={onMapPressed}
                 />
             </View>
         </ScrollView>

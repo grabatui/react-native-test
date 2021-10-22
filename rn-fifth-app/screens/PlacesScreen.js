@@ -24,7 +24,7 @@ const PlacesScreen = ({ navigation }) => {
             renderItem={(item) => (
                 <Place
                     data={item}
-                    onPress={() => navigation.navigate('Place', {data: item})}
+                    onPress={() => navigation.navigate('Place', {data: item.item})}
                 />
             )}
         />

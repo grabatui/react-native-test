@@ -5,6 +5,7 @@ import MapView, { Marker } from 'react-native-maps';
 
 const MapScreen = ({ route, navigation }) => {
     let initialCoordinates = route.params.coordinates;
+    const readonly = route.params.readonly;
 
     if (! initialCoordinates.longitude || ! initialCoordinates.latitude) {
         initialCoordinates = {
@@ -16,6 +17,10 @@ const MapScreen = ({ route, navigation }) => {
     const [selectedLocation, setSelectedLocation] = useState(initialCoordinates);
 
     const onPressed = ({ nativeEvent }) => {
+        if (readonly) {
+            return;
+        }
+
         setSelectedLocation({
             latitude: nativeEvent.coordinate.latitude,
             longitude: nativeEvent.coordinate.longitude,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { TouchableOpacity, Image, StyleSheet, TouchableNativeFeedback, Platform } from 'react-native';
 
 
 const MapPreview = ({ longitude, latitude, children, style, onPressed }) => {
@@ -7,15 +7,19 @@ const MapPreview = ({ longitude, latitude, children, style, onPressed }) => {
         ? `https://static-maps.yandex.ru/1.x/?ll=${longitude},${latitude}&z=14&l=map&size=400,200&pt=${longitude},${latitude},pm2rdm`
         : null;
 
+    let TouchableComponent = (Platform.OS == 'android' && Platform.Version > 21)
+        ? TouchableNativeFeedback
+        : TouchableOpacity;
+
     return (
-        <TouchableOpacity onPress={onPressed} style={{...style, ...styles.wrapper}}>
+        <TouchableComponent onPress={onPressed} style={{...styles.wrapper, ...style}}>
             {imagePreviewUrl
                 ? <Image
                     style={styles.image}
                     source={{uri: imagePreviewUrl}}
                 />
                 : children}
-        </TouchableOpacity>
+        </TouchableComponent>
     );
 };
 

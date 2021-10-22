@@ -65,6 +65,11 @@ const PlacesNavigator = () => (
                     headerTitle: 'Map',
                     headerRight: () => {
                         const onPressed = route.params.onSavePressed;
+                        const readonly = route.params.readonly;
+
+                        if (readonly) {
+                            return;
+                        }
 
                         return (
                             <HeaderButtons HeaderButtonComponent={HeaderButton}>
