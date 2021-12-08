@@ -27,8 +27,17 @@ export default function App() {
                 })
                 .then((response) => {
                     if (response.status !== 'granted') {
-                        return;
+                        throw new Error('Permission denied');
                     }
+                })
+                .then(() => {
+                    return Notifications.getExpoPushTokenAsync();
+                })
+                .then((response) => {
+                    const token = response.data;
+                })
+                .catch((error) => {
+                    return null;
                 });
         },
         []
@@ -53,15 +62,7 @@ export default function App() {
     );
 
     const triggerNotificationHandler = () => {
-        Notifications.scheduleNotificationAsync({
-            content: {
-                title: 'My first local notification',
-                body: 'This is the first local notification we are sending',
-            },
-            trigger: {
-                seconds: 3,
-            },
-        });
+        
     };
 
     return (
