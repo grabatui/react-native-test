@@ -1,8 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Button, View } from 'react-native';
 import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
 
 
 Notifications.setNotificationHandler({
@@ -14,13 +13,15 @@ Notifications.setNotificationHandler({
 });
 
 export default function App() {
+    const [token, setToken] = useState(null);
+
     useEffect(
         () => {
-            Permissions
-                .getAsync(Permissions.NOTIFICATIONS)
+            Notifications
+                .getPermissionsAsync()
                 .then((response) => {
-                    if (response.status === 'granted') {
-                        return Permissions.askAsync(Permissions.NOTIFICATIONS);
+                    if (response.status !== 'granted') {
+                        return Notifications.requestPermissionsAsync();
                     }
 
                     return response;
@@ -34,7 +35,7 @@ export default function App() {
                     return Notifications.getExpoPushTokenAsync();
                 })
                 .then((response) => {
-                    const token = response.data;
+                    setToken(response.data);
                 })
                 .catch((error) => {
                     return null;
@@ -62,7 +63,23 @@ export default function App() {
     );
 
     const triggerNotificationHandler = () => {
-        
+        fetch(
+            'https://exp.host/--/api/v2/push/send',
+            {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Accept-Encoding': 'gzip, deflate',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    to: token,
+                    data: {extraData: 'Some data'},
+                    title: 'Send via the app',
+                    body: 'This push notification was sent via the app!',
+                })
+            }
+        );
     };
 
     return (
